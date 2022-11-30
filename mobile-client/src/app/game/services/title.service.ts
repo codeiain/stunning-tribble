@@ -14,20 +14,20 @@ export class TileService {
         let newid = this.images.length;
         let tile = [id, new Image(), false];
         tile[1].src = imgSrc;
-        tile[1].onload = function () { 
-            tile[2] = true; 
+        tile[1].onload = function () {
+            tile[2] = true;
         };
-        tile[1].onerror = function(){
+        tile[1].onerror = function () {
             console.log("error");
         }
         this.images[newid] = tile;
 
     }
 
-    public allLoaded(){
+    public allLoaded() {
         let i, len = this.images.length;
-        for (i = 0; i <len; i ++){
-            if (this.images[i][2] === false){
+        for (i = 0; i < len; i++) {
+            if (this.images[i][2] === false) {
                 return false;
             }
         }
@@ -38,14 +38,20 @@ export class TileService {
         let i, len = this.images.length;
         for (i = 0; i < len; i++) {
             if (this.images[i][0] == id) {
-                return this.images[i][1];
+                return this.images[i][1] as HTMLImageElement;
             }
         }
+        return undefined;
     }
 
     public draw(x: number, y: number, tile: any) {
         //this.screen.handler.fillText(tile, x * 16, y * 16);
         let img = this.retrieve(tile);
-        this.screen.handler.drawImage(img, x * 16, y * 16);
+        //this.screen.handler.drawImage(img, x * 16, y * 16);
+        this.screen.handler.drawImage(this.retrieve(tile.ground), x * 16, y * 16);
+        let itemTile = this.retrieve(tile.item);
+        if (itemTile !== undefined) {
+            this.screen.handler.drawImage(itemTile, x * 16, y * 16);
+        }
     }
 }

@@ -23,7 +23,6 @@ export class GamePage implements OnInit {
         let screen = new ScreenModel();
         screen.canvas =  document.getElementById('canvas') as HTMLCanvasElement;
         screen.handler = screen.canvas.getContext('2d');
-        screen.handler.translate(0,8);
         screen.height = screen.canvas.height;
         screen.width = screen.canvas.width;
         screen.tilesX = screen.canvas.width / 16;
