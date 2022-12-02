@@ -1,9 +1,11 @@
 version: '3.3'
 services:
     couchbase:
-        image: couchbase/server:6.6.5
+        tty: true
+        image: couchbase/server
         deploy:
             replicas: 1
+        restart: always
         ports:
             - 8091:8091
             - 8092:8092
@@ -12,6 +14,6 @@ services:
             - 11210:11210
         volumes:
             - "./setup-couchbase.sh:/opt/couchbase/setup-couchbase.sh"
-            - "./lytx_registration_sample_data.json:/opt/couchbase/lytx_registration_sample_data.json"
+            - "./mapTestData.json:/opt/couchbase/mapTestData.json"
         command: 
             - /opt/couchbase/setup-couchbase.sh
