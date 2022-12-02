@@ -16,6 +16,7 @@ export class PlayerService {
     public canInput = false;
     mapService: MapService;
     public ScriptService: ScriptService | undefined;
+    public model = 0;
 
     constructor(screen: ScreenModel, viewport: ViewPortModel, mapService: MapService) {
         console.log('PlayerService')
@@ -123,7 +124,7 @@ export class PlayerService {
         if (this.mapService.currentMap[toY] && 
             this.mapService.currentMap[toY][toX] && 
             this.mapService.currentMap[toY][toX].item && 
-            this.mapService.currentMap[toY][toX].item ==2 || this.mapService.currentMap[toY][toX].item == 6) {
+            this.mapService.currentMap[toY][toX].solid ==1) {
             this.canInput = true;
         } else {
             this.viewport.playerOffsetX = x * 5;
