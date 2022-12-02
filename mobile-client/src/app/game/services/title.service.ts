@@ -1,17 +1,13 @@
 import { Injectable } from "@angular/core";
-import { ScreenModel } from "../models/screen";
 import { TileModel } from "../models/tile";
-import { ViewPortModel } from "../models/viewport";
+import { ScreenService } from "./screen.service";
+import { ViewportService } from "./viewport.service";
 
 @Injectable()
 export class TileService {
     private images: any = [];
-    private screen: ScreenModel;
-    viewport: ViewPortModel;
 
-    constructor(screen: ScreenModel, viewport: ViewPortModel) {
-        this.screen = screen;
-        this.viewport = viewport;
+    constructor(private screenService: ScreenService, private viewportService: ViewportService) {
     }
 
     public store(id: any, imgSrc: any) {
@@ -49,15 +45,15 @@ export class TileService {
     }
 
     public draw(x: number, y: number, tile: any) {
-        let rx = x * 16 + this.viewport.playerOffsetX;
-        let ry = y * 16 + this.viewport.playerOffsetY;
+        let rx = x * 16 + this.viewportService.playerOffsetX;
+        let ry = y * 16 + this.viewportService.playerOffsetY;
         let t = new TileModel();
         let groundTile = (this.retrieve(tile.ground) as HTMLImageElement);
         console.log(groundTile);
-        this.screen.handler.drawImage(groundTile, rx, ry);
+        this.screenService.handler.drawImage(groundTile, rx, ry);
         let itemTile = this.retrieve(tile.item);
         if (itemTile !== undefined) {
-            this.screen.handler.drawImage(itemTile, rx, ry);
+            this.screenService.handler.drawImage(itemTile, rx, ry);
         }
     }
 }

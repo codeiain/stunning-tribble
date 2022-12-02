@@ -1,6 +1,7 @@
+import { Injectable } from "@angular/core";
 
-
-export class ScreenModel
+@Injectable()
+export class ScreenService
 {
     public width: number = 0;
     public height : number = 0;

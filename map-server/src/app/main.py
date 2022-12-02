@@ -1,8 +1,9 @@
 from .adapter.inmemory_map_repository import InMemoryMapRepository
 from .domain.map import Map
 
-from fastapi import FastAPI, WebSocket
+from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 html = """
@@ -17,16 +18,31 @@ html = """
 </html>
 """
 map_repository = InMemoryMapRepository()
+origins = [
+    "https://8100-codeiain-stunningtribbl-3ouo8f6hgvq.ws-eu77.gitpod.io/",
+    "https://8000-codeiain-stunningtribbl-3ouo8f6hgvq.ws-eu77.gitpod.io/",
+    "http://localhost",
+    "http://localhost:8080",
+]
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 async def get():
     return HTMLResponse(html)
 
 
-@app.get("/map/{map_id}", response_model=int)
+@app.get("/map/{map_id}")
 async def get_map(map_id):
-    return map_repository.get(map_id)
+    result = map_repository.get(map_id)
+    print (result)
+    return result
 
 @app.post("/create")
 async def create():

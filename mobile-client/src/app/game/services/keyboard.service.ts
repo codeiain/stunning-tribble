@@ -1,20 +1,14 @@
 import { Injectable } from "@angular/core";
-import { ViewPortModel } from "../models/viewport";
 import { MapService } from "./map.service";
 import { PlayerService } from "./player.service";
+
 
 @Injectable()
 export class KeyboardService {
 
-    private viewport: ViewPortModel;
-    private mapService: MapService;
-    playerService: PlayerService;
 
+    constructor(private mapService: MapService, private playerService: PlayerService) {
 
-    constructor(viewport: ViewPortModel, mapService: MapService, playerService: PlayerService) {
-        this.viewport = viewport;
-        this.mapService = mapService;
-        this.playerService = playerService;
     }
 
     public getKeycode(key: string) {

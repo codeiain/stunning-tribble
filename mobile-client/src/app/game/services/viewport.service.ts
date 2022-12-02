@@ -1,4 +1,7 @@
-export class ViewPortModel
+import { Injectable } from "@angular/core";
+
+@Injectable()
+export class ViewportService
 {
     public x: number = 0;
     public y: number = 0;

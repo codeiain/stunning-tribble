@@ -14,6 +14,7 @@ class Map:
     author:str = ""
     map_data: list = field(default_factory=list) 
     models_data:list = field(default_factory=list) 
+    
     def save(self, websocket_repository: "WebSocketRepository"):
         return websocket_repository.add(self)
 

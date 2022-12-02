@@ -1,28 +1,20 @@
 import { Injectable } from "@angular/core";
-import { throws } from "assert";
-import { ScreenModel } from "../models/screen";
-import { ViewPortModel } from "../models/viewport";
 import { MapService } from "./map.service";
+import { ScreenService } from "./screen.service";
 import { ScriptService } from "./script.service";
+import { ViewportService } from "./viewport.service";
 
 @Injectable()
 export class PlayerService {
 
     public sprite = [[new Image(), false]];
-    public screen: ScreenModel;
     public spriteIndex = 6;
     private leftLeg = false;
-    viewport: ViewPortModel;
     public canInput = false;
-    mapService: MapService;
-    public ScriptService: ScriptService | undefined;
     public model = 0;
 
-    constructor(screen: ScreenModel, viewport: ViewPortModel, mapService: MapService) {
+    constructor(private screenService: ScreenService, private viewportService: ViewportService, private mapService: MapService, private scriptService: ScriptService) {
         console.log('PlayerService')
-        this.screen = screen;
-        this.viewport = viewport;
-        this.mapService = mapService;
     }
 
 
@@ -54,8 +46,8 @@ export class PlayerService {
             height: Math.ceil((this.sprite[0][0] as HTMLImageElement).height),
         }
         let screen = {
-            width: this.screen.width,
-            height: this.screen.height
+            width: this.screenService.width,
+            height: this.screenService.height
         }
 
         let x = (screen.width / 2) - (character.width / 2);
@@ -67,12 +59,12 @@ export class PlayerService {
     public draw() {
         console.log('PlayerService.draw')
         let loc = this.calcLoc();
-        this.screen.handler.drawImage(this.sprite[this.spriteIndex][0], loc.left, loc.top);
+        this.screenService.handler.drawImage(this.sprite[this.spriteIndex][0], loc.left, loc.top);
     }
 
     public activate() {
-        var x = this.viewport.x + (this.screen.tilesX / 2 - 0.5);
-        var y = this.viewport.y + (this.screen.tilesY / 2 - 0.5);
+        var x = this.viewportService.x + (this.screenService.tilesX / 2 - 0.5);
+        var y = this.viewportService.y + (this.screenService.tilesY / 2 - 0.5);
 
         switch (this.spriteIndex) {
             case 0:
@@ -90,7 +82,7 @@ export class PlayerService {
 
         }
         if (this.mapService.currentMap[y] && this.mapService.currentMap[y][x] && this.mapService.currentMap[y][x].onactivate != undefined) {
-            this.ScriptService?.call[this.mapService.currentMap[y][x].onactivate]();
+            this.scriptService?.call[this.mapService.currentMap[y][x].onactivate]();
         }
     }
 
@@ -118,17 +110,17 @@ export class PlayerService {
                 break;
         }
 
-        let toX = this.viewport.x + (this.screen.tilesX / 2 - 0.5) - x;
-        let toY = this.viewport.y + (this.screen.tilesY / 2 - 0.5) - y;
+        let toX = this.viewportService.x + (this.screenService.tilesX / 2 - 0.5) - x;
+        let toY = this.viewportService.y + (this.screenService.tilesY / 2 - 0.5) - y;
 
-        if (this.mapService.currentMap[toY] && 
-            this.mapService.currentMap[toY][toX] && 
-            this.mapService.currentMap[toY][toX].item && 
+        if (this.mapService.currentMap[toY] &&
+            this.mapService.currentMap[toY][toX] &&
+            this.mapService.currentMap[toY][toX].item &&
             this.mapService.currentMap[toY][toX].solid ==1) {
             this.canInput = true;
         } else {
-            this.viewport.playerOffsetX = x * 5;
-            this.viewport.playerOffsetY = y * 5;
+            this.viewportService.playerOffsetX = x * 5;
+            this.viewportService.playerOffsetY = y * 5;
             setTimeout(() => {
                 this.animate();
             }, 100);
@@ -149,7 +141,7 @@ export class PlayerService {
             case 0:
                 y = 11;
                 break;
-            // 11 = (6 from the player.move) + 5 
+            // 11 = (6 from the player.move) + 5
             case 3:
                 x = -11;
                 break;
@@ -162,15 +154,15 @@ export class PlayerService {
         }
         this.spriteIndex += (this.leftLeg === true) ? 1 : 2;
         this.leftLeg = !this.leftLeg;
-        this.viewport.playerOffsetX = x;
-        this.viewport.playerOffsetY = y;
+        this.viewportService.playerOffsetX = x;
+        this.viewportService.playerOffsetY = y;
         this.draw();
     }
 
     public reset() {
         let index, x, y;
-        x = this.viewport.x;
-        y = this.viewport.y;
+        x = this.viewportService.x;
+        y = this.viewportService.y;
 
         index = 0;
         switch (this.spriteIndex) {
@@ -195,18 +187,18 @@ export class PlayerService {
                 index = 9;
                 break;
         }
-        this.viewport.x = x;
-        this.viewport.y = y;
-        this.viewport.playerOffsetX = 0;
-        this.viewport.playerOffsetY = 0;
+        this.viewportService.x = x;
+        this.viewportService.y = y;
+        this.viewportService.playerOffsetX = 0;
+        this.viewportService.playerOffsetY = 0;
         this.spriteIndex = index;
         this.canInput = true;
 
         this.draw();
-        let tileX = x + (this.screen.tilesX / 2 - 0.5);
-        let tileY = y + (this.screen.tilesY / 2 - 0.5);
+        let tileX = x + (this.screenService.tilesX / 2 - 0.5);
+        let tileY = y + (this.screenService.tilesY / 2 - 0.5);
         if (this.mapService.currentMap[tileY] && this.mapService.currentMap[tileY][tileX] && this.mapService.currentMap[tileY][tileX].onenter != undefined) {
-            this.ScriptService?.call[this.mapService.currentMap[tileY][tileX].onenter]();
+            this.scriptService.call[this.mapService.currentMap[tileY][tileX].onenter]();
         }
     }
 }

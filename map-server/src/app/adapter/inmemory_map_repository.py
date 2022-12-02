@@ -9,13 +9,15 @@ from couchbase.cluster import Cluster
 from couchbase.options import (ClusterOptions, ClusterTimeoutOptions,
                                QueryOptions)
 
+import json
+
 
 class InMemoryMapRepository(MapRepository):
     def __init__(self):
         self.maps = []
         self.username = "Administrator"
         self.password = "password"
-        self.bucket_name = "maps"
+        self.bucket_name = "GameSystem"
         self.auth = PasswordAuthenticator(
             self.username,
             self.password,
@@ -24,25 +26,54 @@ class InMemoryMapRepository(MapRepository):
                                ClusterOptions(self.auth))
         self.cluster.wait_until_ready(timedelta(seconds=5))
         self.cb = self.cluster.bucket(self.bucket_name)
-        cb_coll = self.cb.scope("inventory").collection("airline")
-        cb_coll_default = self.cb.default_collection()
+        self.cb_coll = self.cb.scope("_default").collection("maps")
+        self.cb_coll_default = self.cb.default_collection()
+        try:
+            self.cluster.query("CREATE PRIMARY INDEX ON GameSystem._default.maps")
+        except QueryIndexAlreadyExistsException:
+            print("Index already exists")
+
+
+    def map_for_save(self, map):
+        map_data = {
+            "map_id": map.map_id,
+            "map_name": map.map_name,
+            "author": map.author,
+            "data": map.map_data,
+            "models": map.models_data
+        }
+        return map_data
 
     def add(self, map: Map) -> Map:
         try:
             key = map.map_id
-            results = self.cb_coll.upsert(key, map)
+            results = self.cb_coll.upsert(key, self.map_for_save(map))
         except Exception as e:
-            print(e) 
+            print(e)
         self.maps.append(map)
-        
+
         return self.maps
 
     def get(self, map_id) -> Map:
+        scope = self.cb.scope('_default')
+        sql_query ='SELECT * FROM maps WHERE map_id = $1'
+        row_iter =  scope.query(
+            sql_query,
+            QueryOptions(positional_parameters=[map_id])
+        )
+        result = {}
+        print(type(result))
+        for row in row_iter:
+            print(type(row))
+            print(row)
+            result = row
         # return the first and only map the now
-        return self.maps[0]
+        return result
 
     def all(self) -> List[Map]:
-        return self.maps
+        result = self.cluster.query("SELECT * from GameSystem._default.maps")
+        results = [row for row in result]
+        return results
 
     def total(self) -> int:
         return len(self.maps)

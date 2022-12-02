@@ -20,18 +20,20 @@ curl -v http://couchbase:8091/settings/web -d port=8091 -d username=Administrato
 
   sleep 10s 
 
-curl -v -X POST http://couchbase:8091/pools/default/buckets -u Administrator:password -d name=maps -d bucketType=couchbase -d ramQuotaMB=256
-
+curl -v -X POST http://couchbase:8091/pools/default/buckets -u Administrator:password -d name=GameSystem -d bucketType=couchbase -d ramQuotaMB=256
 
   sleep 10s 
 
- curl -v -X POST http://couchbase:8091/settings/indexes -u Administrator:password -d storageMode=memory_optimized
+curl -v -X POST http://couchbase:8091/pools/default/buckets/GameSystem/scopes/_default/collections -u Administrator:password -d name=maps -d maxTTL=0
+  sleep 10s
+
+curl -v -X POST http://couchbase:8091/settings/indexes -u Administrator:password -d storageMode=memory_optimized
 
    sleep 10s 
 
-#   /opt/couchbase/bin/curl -v http://couchbase:8093/query/service \
-#   -u Administrator:password \
-#   -d 'statement=CREATE INDEX `Idx_Type_IMEI` ON `fleet`(`Type`,`IMEI`) WITH { "defer_build":false }'
+  /opt/couchbase/bin/curl -v http://couchbase:8093/query/service \
+   -u Administrator:password \
+   -d 'statement=CREATE PRIMARY INDEX ON `GameSystem`._default.maps'
 
 #   sleep 10s 
 
@@ -40,4 +42,14 @@ curl -v -X POST http://couchbase:8091/pools/default/buckets -u Administrator:pas
 #   -u Administrator \
 #   -p password \
 #   -d "file:///opt/couchbase/lytx_registration_sample_data.json" -b 'fleet' -g %AssetId%
-# fg 1
+
+
+/opt/couchbase/bin/cbimport json --format list \
+    -c http://couchbase:8091 \
+    -u Administrator -p password \
+    -d 'file:///opt/couchbase/mapTestData.json' \
+    -b 'GameSystem' \
+    --scope-collection-exp "_default.maps" \
+    -g %map_id% 
+
+fg 1

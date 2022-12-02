@@ -1,56 +1,72 @@
 import { Injectable } from "@angular/core";
-import { title } from "process";
-import { throwError } from "rxjs";
-import { ScreenModel } from "../models/screen";
+import { Observable } from "rxjs";
+import { ApiService } from "src/api/map/services";
 import { TileModel } from "../models/tile";
-import { ViewPortModel } from "../models/viewport";
-import { TileService } from './title.service';
+import { ScreenService } from "./screen.service";
+import { TileService } from "./title.service";
+import { ViewportService } from "./viewport.service";
+
 @Injectable()
 export class MapService {
-    public mapone =
-        [[{ ground: 1, item: 2 }, { ground: 1, item: 2 }, { ground: 1, item: 2 }, { ground: 1, item: 2 }, { ground: 1, item: 2 }, { ground: 1, item: 2 }, { ground: 1, item: 2 }, { ground: 1, item: 2 }, { ground: 1, item: 2 }, { ground: 1, item: 2 }, { ground: 1, item: 2 }, { ground: 1, item: 2 }], [{ ground: 1, item: 2 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1, item: 2 }], [{ ground: 1, item: 2 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1, item: 2 }], [{ ground: 1, item: 2 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1, item: 2 }], [{ ground: 1, item: 2 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1, item: 2 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1, item: 2 }], [{ ground: 1, item: 2 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1, item: 2 }, { ground: 1, item: 2 }, { ground: 1 }, { ground: 1 }, { ground: 1, item: 2 }], [{ ground: 1, item: 2 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1, item: 2 }, { ground: 1 }, { ground: 1 }, { ground: 1, item: 2 }], [{ ground: 1, item: 2 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1, item: 2 }, { ground: 1 }, { ground: 1 }, { ground: 1, item: 2 }], [{ ground: 1, item: 2 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1, item: 2 }, { ground: 1 }, { ground: 1 }, { ground: 1, item: 2 }], [{ ground: 1, item: 2 }, { ground: 1 }, { ground: 1, item: 3, onenter: 0 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1, item: 2 }], [{ ground: 1, item: 2 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1, item: 2 }], [{ ground: 1, item: 2 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1, item: 2 }], [{ ground: 1, item: 2 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1 }, { ground: 1, item: 2 }], [{ ground: 1, item: 2 }, { ground: 1, item: 2 }, { ground: 1, item: 2 }, { ground: 1, item: 2 }, { ground: 1, item: 2 }, { ground: 1, item: 2 }, { ground: 1, item: 2 }, { ground: 1, item: 2 }, { ground: 1, item: 2 }, { ground: 1, item: 2 }, { ground: 1, item: 2 }, { ground: 1, item: 2 }]];
-    public maptwo =
-        [[{ ground: 5, item: 2 }, { ground: 5, item: 2 }, { ground: 5, item: 2 }, { ground: 5, item: 2 }, { ground: 5, item: 2 }, { ground: 5, item: 2 }, { ground: 5, item: 2 }, { ground: 5, item: 2 }, { ground: 5, item: 2 }, { ground: 5, item: 2 }, { ground: 5, item: 2 }, { ground: 5, item: 2 }], [{ ground: 5, item: 2 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5, item: 2 }], [{ ground: 5, item: 2 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5, item: 2 }], [{ ground: 5, item: 2 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5, item: 6, onactivate: 2 }, { ground: 5 }, { ground: 5 }, { ground: 5, item: 2 }], [{ ground: 5, item: 2 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5, item: 2 }], [{ ground: 5, item: 2 }, { ground: 5 }, { ground: 5, item: 4, onenter: 1 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5, item: 2 }], [{ ground: 5, item: 2 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5, item: 2 }], [{ ground: 5, item: 2 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { ground: 5 }, { grounmmd: 5 }, { ground: 5, item: 2 }], [{ ground: 5, item: 2 }, { ground: 5, item: 2 }, { ground: 5, item: 2 }, { ground: 5, item: 2 }, { ground: 5, item: 2 }, { ground: 5, item: 2 }, { ground: 5, item: 2 }, { ground: 5, item: 2 }, { ground: 5, item: 2 }, { ground: 5, item: 2 }, { ground: 5, item: 2 }, { ground: 5, item: 2 }]];
-    private screen: ScreenModel;
-    private viewport: ViewPortModel;
-    private tileService: TileService | undefined;
-    currentMap: any;
+  currentMap: any;
+  public mapone =
+    [
+      [{ ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 1, item: 2 }],
+      [{ ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 1, item: 2 }],
+      [{ ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 1, item: 2 }],
+      [{ ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 1, item: 2 }],
+      [{ ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 1, item: 2 }],
+      [{ ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 1, item: 2 }],
+      [{ ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 1, item: 2 }],
+      [{ ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 1, item: 2 }],
+      [{ ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 1, item: 2 }],
+      [{ ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0, item: 3, onenter: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 1, item: 2 }],
+      [{ ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 1, item: 2 }],
+      [{ ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 1, item: 2 }],
+      [{ ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 0 }, { ground: 1, solid: 1, item: 2 }],
+      [{ ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 1, item: 2 }, { ground: 1, solid: 1, item: 2 }]];
+  public maptwo =
+    [
+      [{ ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }],
+      [{ ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 1, item: 2 }],
+      [{ ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 1, item: 2 }],
+      [{ ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0, item: 6, onactivate: 2 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 1, item: 2 }],
+      [{ ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 1, item: 2 }],
+      [{ ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0, item: 4, onenter: 1 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 1, item: 2 }],
+      [{ ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 1, item: 2 }],
+      [{ ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { grounmmd: 5 }, { ground: 5, solid: 1, item: 2 }],
+      [{ ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }]];
 
+  constructor(private apiService: ApiService, private screenService: ScreenService, private viewportService: ViewportService, private tileService: TileService) {
 
-    constructor() {
-        console.log("MapService")
-        this.screen = new ScreenModel();
-        this.viewport = new ViewPortModel()
+  }
+
+  public setMap(mapData: any) {
+
+    this.currentMap = mapData
+  }
+
+  public getMap(map_id: any): Observable<any> {
+    return this.apiService.getMapMapMapIdGet$Response({map_id: map_id})
+  }
+
+  public draw() {
+    console.log('MapService.draw')
+    let i, j;
+    let mapX = 0;
+    let mapY = 0;
+    let iMax = this.screenService.tilesX + this.viewportService.overflowTile;
+    let jMax = this.screenService.tilesY + this.viewportService.overflowTile;
+    let tile: TileModel;
+
+    for (j = -this.viewportService.overflowTile; j < this.screenService.tilesY; j++) {
+      for (i = -this.viewportService.overflowTile; i < this.screenService.tilesX; i++) {
+        let mapX = i + this.viewportService.x;
+        let mapY = j + this.viewportService.y;
+        tile = (this.currentMap[mapY] && this.currentMap[mapY][mapX]) ? this.currentMap[mapY][mapX] : new TileModel();
+        this.tileService?.draw(i, j, tile);
+      }
     }
-
-    public setMap(mapData: any) {
-        this.currentMap = mapData;
-    }
-
-
-    public setup(screen: ScreenModel, viewport: ViewPortModel, tileService: TileService) {
-        this.screen = screen;
-        this.viewport = viewport
-        this.tileService = tileService
-    }
-
-    public draw() {
-        console.log('MapService.draw')
-        let i, j;
-        let mapX = 0;
-        let mapY = 0;
-        let iMax = this.screen.tilesX + this.viewport.overflowTile;
-        let jMax = this.screen.tilesY + this.viewport.overflowTile;
-        let tile: TileModel;
-
-        for (j = -this.viewport.overflowTile; j < this.screen.tilesY; j++) {
-            for (i = -this.viewport.overflowTile; i < this.screen.tilesX; i++) {
-                let mapX = i + this.viewport.x;
-                let mapY = j + this.viewport.y;
-                tile = (this.currentMap[mapY] && this.currentMap[mapY][mapX]) ? this.currentMap[mapY][mapX] : new TileModel();
-                this.tileService?.draw(i, j, tile);
-            }
-        }
-    }
+  }
 
 }

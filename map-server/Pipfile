@@ -11,6 +11,7 @@ requests = "*"
 fastapi = "*"
 uvicorn = "*"
 websockets = "*"
+couchbase = "*"
 
 [requires]
 python_version = "3.8"
