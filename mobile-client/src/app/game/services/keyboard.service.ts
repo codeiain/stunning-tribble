@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { MapService } from "./map.service";
+import { NpcService } from "./npc.service";
 import { PlayerService } from "./player.service";
 
 
@@ -7,7 +8,10 @@ import { PlayerService } from "./player.service";
 export class KeyboardService {
 
 
-    constructor(private mapService: MapService, private playerService: PlayerService) {
+    constructor(
+      private mapService: MapService,
+      private playerService: PlayerService,
+      private npcService: NpcService) {
 
     }
 
@@ -44,5 +48,6 @@ export class KeyboardService {
         }
         this.mapService.draw();
         this.playerService.draw();
+        this.npcService.draw(0);
     }
 }

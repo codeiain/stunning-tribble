@@ -14,6 +14,8 @@ import { ViewportService } from './services/viewport.service';
 import { KeyboardService } from './services/keyboard.service';
 import { PlayerService } from './services/player.service';
 import { ScriptService } from './services/script.service';
+import { ModelService } from './services/model.service';
+import { NpcService } from './services/npc.service';
 
 @NgModule({
   imports: [
@@ -23,10 +25,18 @@ import { ScriptService } from './services/script.service';
     GamePageRoutingModule,
 
   ],
-  providers:[GameService, MapService,
+  providers:[
+    GameService,
+    MapService,
     TileService,
     ScreenService,
-    ViewportService,KeyboardService, PlayerService, ScriptService],
+    ViewportService,
+    KeyboardService,
+    PlayerService,
+    ScriptService,
+    ModelService,
+    NpcService
+  ],
   declarations: [GamePage]
 })
 export class GamePageModule {}

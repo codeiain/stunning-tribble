@@ -56,4 +56,15 @@ export class TileService {
             this.screenService.handler.drawImage(itemTile, rx, ry);
         }
     }
+
+    public hasProperty(tile:any, prop: string,mustHaveValue: boolean | undefined)
+    {
+      if (tile !== undefined && tile[prop] !== undefined){
+        if (mustHaveValue !== undefined){
+          return tile[prop] == mustHaveValue;
+        }
+        return true;
+      }
+      return false;
+    }
 }

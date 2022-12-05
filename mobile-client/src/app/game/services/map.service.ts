@@ -47,7 +47,7 @@ export class MapService {
   }
 
   public getMap(map_id: any): Observable<any> {
-    return this.apiService.getMapMapMapIdGet$Response({map_id: map_id})
+    return this.apiService.getMapMapMapIdGet$Response({ map_id: map_id })
   }
 
   public draw() {
@@ -63,10 +63,24 @@ export class MapService {
       for (i = -this.viewportService.overflowTile; i < this.screenService.tilesX; i++) {
         let mapX = i + this.viewportService.x;
         let mapY = j + this.viewportService.y;
-        tile = (this.currentMap[mapY] && this.currentMap[mapY][mapX]) ? this.currentMap[mapY][mapX] : new TileModel();
+
+        tile = this.getTile(mapX, mapY);
+        if (tile === undefined)[
+          tile = new TileModel()
+        ]
         this.tileService?.draw(i, j, tile);
       }
     }
+
+  }
+
+  public getTile(x: number, y: number) {
+    return this.currentMap[y] && this.currentMap[y][x] ? this.currentMap[y][x] : undefined;
   }
 
 }
+
+
+
+
+
