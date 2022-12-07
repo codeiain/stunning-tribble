@@ -6,8 +6,7 @@ from ..domain.map_repository import MapRepository
 from datetime import timedelta
 from couchbase.auth import PasswordAuthenticator
 from couchbase.cluster import Cluster
-from couchbase.options import (ClusterOptions, ClusterTimeoutOptions,
-                               QueryOptions)
+from couchbase.options import ClusterOptions, ClusterTimeoutOptions, QueryOptions
 
 import json
 
@@ -22,8 +21,7 @@ class InMemoryMapRepository(MapRepository):
             self.username,
             self.password,
         )
-        self.cluster = Cluster('couchbase://localhost',
-                               ClusterOptions(self.auth))
+        self.cluster = Cluster("couchbase://localhost", ClusterOptions(self.auth))
         self.cluster.wait_until_ready(timedelta(seconds=5))
         self.cb = self.cluster.bucket(self.bucket_name)
         self.cb_coll = self.cb.scope("_default").collection("maps")
@@ -33,14 +31,13 @@ class InMemoryMapRepository(MapRepository):
         except QueryIndexAlreadyExistsException:
             print("Index already exists")
 
-
     def map_for_save(self, map):
         map_data = {
             "map_id": map.map_id,
             "map_name": map.map_name,
             "author": map.author,
             "data": map.map_data,
-            "models": map.models_data
+            "models": map.models_data,
         }
         return map_data
 
@@ -55,12 +52,9 @@ class InMemoryMapRepository(MapRepository):
         return self.maps
 
     def get(self, map_id) -> Map:
-        scope = self.cb.scope('_default')
-        sql_query ='SELECT * FROM maps WHERE map_id = $1'
-        row_iter =  scope.query(
-            sql_query,
-            QueryOptions(positional_parameters=[map_id])
-        )
+        scope = self.cb.scope("_default")
+        sql_query = "SELECT * FROM maps WHERE map_id = $1"
+        row_iter = scope.query(sql_query, QueryOptions(positional_parameters=[map_id]))
         result = {}
         print(type(result))
         for row in row_iter:

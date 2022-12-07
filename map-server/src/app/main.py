@@ -33,6 +33,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/")
 async def get():
     return HTMLResponse(html)
@@ -41,13 +42,14 @@ async def get():
 @app.get("/map/{map_id}")
 async def get_map(map_id):
     result = map_repository.get(map_id)
-    print (result)
     return result
+
 
 @app.post("/create")
 async def create():
     map = Map()
     return map_repository.add(map)
+
 
 @app.get("/maps")
 async def get_all_maps():

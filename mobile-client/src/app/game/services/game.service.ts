@@ -37,9 +37,32 @@ export class GameService {
     //   this.mapServer.setMap(this.mapServer.mapone);
     //   this.drawMap();
     // })
-
+    let myUserId = null;
+    let websocket = new WebSocket('wss://8000-codeiain-stunningtribbl-p7j1j1qk8v7.ws-eu77.gitpod.io/ws');
+    websocket.onopen = this.onWebsocketOpen(websocket);
+    websocket.onerror = this.onWebsocketError;
+    websocket.onclose = this.onWebsocketClose;
+    websocket.onmessage = this.onWebsocketMessage;
     this.mapServer.setMap(this.mapServer.mapone);
     this.draw();
+  }
+
+  public onWebsocketMessage(message: any) {
+    console.log('Got message from websocket:', message);
+  }
+
+  public onWebsocketError(err: any) {
+    console.error('Websocket error: ', err);
+    this.onWebsocketClose();
+  }
+
+  public onWebsocketClose() {
+    console.log('Closing WebSocket connection');
+  }
+
+  public onWebsocketOpen(websocket: WebSocket){
+    console.log('Opening WebSocket connection');
+    return ()=>{ }
   }
 
 

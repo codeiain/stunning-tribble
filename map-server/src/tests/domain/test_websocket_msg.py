@@ -1,5 +1,6 @@
 import uuid
 import sys
+
 sys.path.append("...")
 
 from app.domain.map import Map

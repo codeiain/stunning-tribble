@@ -7,7 +7,6 @@ def main():
 
     Map().save(map_repository)
 
-
     print(map_repository.all())
     print(f"Total maps: {map_repository.total()}")
 

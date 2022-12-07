@@ -3,8 +3,8 @@ from fastapi.testclient import TestClient
 import unittest
 from ...app.main import app
 
-class TestWebsocket(unittest.TestCase):
 
+class TestWebsocket(unittest.TestCase):
     def test_send_websocket(self):
         client = TestClient(app)
         with client.websocket_connect("/ws") as websocket:

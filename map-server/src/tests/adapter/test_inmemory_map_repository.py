@@ -1,4 +1,5 @@
 import sys
+
 sys.path.append("...")
 
 from app.adapter.inmemory_map_repository import InMemoryMapRepository
