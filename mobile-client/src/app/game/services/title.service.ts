@@ -49,7 +49,6 @@ export class TileService {
         let ry = y * 16 + this.viewportService.playerOffsetY;
         let t = new TileModel();
         let groundTile = (this.retrieve(tile.ground) as HTMLImageElement);
-        console.log(groundTile);
         this.screenService.handler.drawImage(groundTile, rx, ry);
         let itemTile = this.retrieve(tile.item);
         if (itemTile !== undefined) {

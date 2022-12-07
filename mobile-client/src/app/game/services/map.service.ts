@@ -61,8 +61,8 @@ export class MapService {
 
     for (j = -this.viewportService.overflowTile; j < this.screenService.tilesY; j++) {
       for (i = -this.viewportService.overflowTile; i < this.screenService.tilesX; i++) {
-        let mapX = i + this.viewportService.x;
-        let mapY = j + this.viewportService.y;
+        let mapX = Math.ceil(i + this.viewportService.x);
+        let mapY = Math.ceil(j + this.viewportService.y);
 
         tile = this.getTile(mapX, mapY);
         if (tile === undefined)[

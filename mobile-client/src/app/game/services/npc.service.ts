@@ -24,6 +24,6 @@ export class NpcService {
     let loc = this.modelService.fixScreenLoc(id, { x: 16, y: 16 });
     var x = (this.x * 16) - (this.viewportService.x * 16) + loc.x + this.viewportService.playerOffsetX;
     var y = (this.y * 16) - (this.viewportService.y * 16) + loc.y + this.viewportService.playerOffsetY;
-    this.modelService.draw(npc.model, 6, x, y);
+    //this.modelService.draw(npc.model, 6, x, y);
   }
 }
