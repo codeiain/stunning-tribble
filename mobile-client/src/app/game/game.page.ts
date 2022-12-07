@@ -20,30 +20,38 @@ import { create } from 'nipplejs';
 })
 export class GamePage implements OnInit {
   public title!: string;
-  size :number = 50;
+  size: number = 50;
 
   constructor(
-    private gameService:GameService,
+    private gameService: GameService,
     @Inject(DOCUMENT) document: Document) {
 
   }
 
   ionViewDidEnter() {
+    setTimeout(()=>{
+      this.UILoaded()
+    }, 300)
+  }
+
+  public UILoaded(){
     var canvas = document.getElementById('canvas') as HTMLCanvasElement;
     var container = document.getElementById('container') as HTMLElement;
-    canvas.width = container.clientWidth;
-    canvas.height = container.clientHeight;
     let joystick = document.getElementById('nipple') as HTMLCanvasElement;
-    joystick.width = container.clientWidth;
-    joystick.height = container.clientHeight;
 
+    let containerWidth = Math.floor(container.clientWidth / 16) * 16;
+    let containerHeight = Math.floor(container.clientHeight / 16) *16;
+
+    canvas.width = containerWidth;
+    canvas.height = containerHeight;
+
+    joystick.width = containerWidth;
+    joystick.height = containerHeight;
 
     this.gameService.setScreenAndViewport(canvas, canvas.width, canvas.height);
     this.gameService.LoadTiles();
     this.gameService.LoadModels();
     this.gameService.startGame(joystick);
-
-
   }
 
 

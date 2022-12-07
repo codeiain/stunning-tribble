@@ -56,10 +56,10 @@ export class TileService {
         }
     }
 
-    public hasProperty(tile:any, prop: string,mustHaveValue: boolean | undefined)
+    public hasProperty(tile:any, prop: string, mustHaveValue: boolean)
     {
       if (tile !== undefined && tile[prop] !== undefined){
-        if (mustHaveValue !== undefined){
+        if (mustHaveValue){
           return tile[prop] == mustHaveValue;
         }
         return true;

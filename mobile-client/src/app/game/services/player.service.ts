@@ -26,44 +26,10 @@ export class PlayerService {
     console.log('PlayerService')
   }
 
-
-  // public store(index: number, imgSrc: string) {
-  //     let sprite = [new Image(), false];
-  //     (sprite[0] as HTMLImageElement).src = imgSrc;
-  //     (sprite[0] as HTMLImageElement).onload = function () {
-  //         sprite[1] = true;
-  //     }
-  //     this.sprite[index] = sprite;
-  // }
-
   public retrieve(index: number): HTMLImageElement {
     return this.sprite[index][0] as HTMLImageElement
   }
 
-  // public allLoaded() {
-  //     for (let i = 0; i > 12; i++) {
-  //         if (this.sprite[i][1] === false) {
-  //             return false;
-  //         }
-  //     }
-  //     return true;
-  // }
-
-  // public calcLoc() {
-  //     let character = {
-  //         width: Math.ceil((this.sprite[0][0] as HTMLImageElement).width),
-  //         height: Math.ceil((this.sprite[0][0] as HTMLImageElement).height),
-  //     }
-  //     let screen = {
-  //         width: this.screenService.width,
-  //         height: this.screenService.height
-  //     }
-
-  //     let x = (screen.width / 2) - (character.width / 2);
-  //     let y = (screen.height / 2) + 8 - (character.height);
-
-  //     return { left: x, top: y };
-  // }
 
   public draw(){
     let loc = this.modelService.fixScreenLoc(this.model, {x:this.screenService.width, y: this.screenService.height});
@@ -92,9 +58,9 @@ export class PlayerService {
     }
     let toTile = this.mapService.getTile(x, y);
 
-    if (this.tileService.hasProperty(toTile, 'onenter', false)) {
-      var ScriptId = toTile.onenter;
-      this.scriptService.call[ScriptId];
+    if (this.tileService.hasProperty(toTile, 'onactivate', false)) {
+      var ScriptId = toTile.onactivate;
+      this.scriptService.scripts[ScriptId].call(this);
     }
   }
 
@@ -125,10 +91,9 @@ export class PlayerService {
     let toX = this.viewportService.x + (this.screenService.tilesX / 2 - 0.5) - x;
     let toY = this.viewportService.y + (this.screenService.tilesY / 2 - 0.5) - y;
 
-    if (this.mapService.currentMap[toY] &&
-      this.mapService.currentMap[toY][toX] &&
-      this.mapService.currentMap[toY][toX].item &&
-      this.mapService.currentMap[toY][toX].solid == 1) {
+    var toTile = this.mapService.getTile(toX, toY);
+
+    if (this.tileService.hasProperty(toTile, 'solid', true)) {
       this.canInput = true;
     } else {
       this.viewportService.playerOffsetX = x * 5;
@@ -214,7 +179,7 @@ export class PlayerService {
 
     if (this.tileService.hasProperty(toTile, 'onenter', false)) {
       var ScriptId = toTile.onenter;
-      this.scriptService.call[ScriptId];
+      this.scriptService.scripts[ScriptId].call(this);
     }
 
   }

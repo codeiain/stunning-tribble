@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { MapService } from "./map.service";
 import { NpcService } from "./npc.service";
 import { PlayerService } from "./player.service";
-import { create } from 'nipplejs';
+import { create, JoystickManagerOptions } from 'nipplejs';
 
 @Injectable()
 export class JoystickService {
@@ -17,34 +17,21 @@ export class JoystickService {
   }
 
   public setup(element: HTMLElement) {
-    let options = {
+    let options: JoystickManagerOptions = {
       zone: element,
-      mode: 'static',
       position: { left: '10%', bottom: '10%' },
       color: 'red',
       dynamicPage: true,
-      size: 2 * this.size
+      size: 2 * this.size,
+      mode: 'static'
     };
 
     this.manager = create(options);
-    this.manager.on('dir:up', () => {
-      console.log('up')
-      this.parseInput('up');
-    })
-    this.manager.on('dir:left', () => {
-      console.log('left')
-      this.parseInput('left');
-    })
-    this.manager.on('dir:down', () => {
-      console.log('down')
-      this.parseInput('down');
-    })
-    this.manager.on('dir:right', () => {
-      console.log('right')
-      this.parseInput('right');
-    })
-    this.manager.on('move', (e:any)=>{
-      console.log(e)
+
+    this.manager.on('move', (e: any, data: any) => {
+      if (data.direction.angle) {
+        this.parseInput(data.direction.angle)
+      }
     })
   }
 

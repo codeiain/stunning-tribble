@@ -1,6 +1,6 @@
 tasks:
   - name: install ionic
-    before: npm install -g @ionic/cli
+    before: npm install -g @ionic/cli && npm install
 
   - name: setup docker
     command: docker-compose up --build
@@ -8,5 +8,4 @@ tasks:
   - name: setup map server
     before:  cd map-server
     init: pipenv install --dev
-    command:  pipenv run uvicorn src.app.main:src.app --reload
 

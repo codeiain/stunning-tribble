@@ -34,12 +34,12 @@ export class ModelService {
 
   public fixScreenLoc(id: number, base: any) {
     var character = {
-      width: Math.ceil(this.list[id][0][0].width),
-      height: Math.ceil(this.list[id][0][0].height)
+      width: this.list[id][0][0].width,
+      height: this.list[id][0][0].height
     };
     var x = (base.x / 2) - (character.width / 2);
     var y = (base.y / 2) - (character.height) + 8;
-    return { x: Math.ceil(x), y: Math.ceil(y) };
+    return { x: x, y: y };
   }
 
 
