@@ -1,0 +1,12 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "codeiain-1",
+        "projectKey": "codeiain_stunning-tribble"
+    },
+    "python.testing.pytestArgs": [
+        "map-server",
+        "websocket-gateway"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+}

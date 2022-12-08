@@ -2,7 +2,7 @@ from .middleware.room_event_middleware import RoomEventMiddleware
 from .domain.room import Room
 from .domain.user_list_response import UserListResponse
 from .domain.user_info_response import UserInfoResponse
-
+import os
 import logging
 import time
 from enum import Enum
@@ -30,7 +30,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-app.mount("/static", StaticFiles(directory="src/app/static"), name="static")
+os.getcwd()
+path = os.path.join(os.getcwd(),"websocket-gateway/src/app/static")
+print(path)
+app.mount("/static", StaticFiles(directory=path)), name="static")
 app.add_middleware(RoomEventMiddleware)
 
 

@@ -78,7 +78,7 @@ export class GameService {
 
   public LoadTiles() {
     this.tileService.store(0, '/assets/tile_cell.png');
-    this.tileService.store(1, '/assets/tile_grass.png');
+    this.tileService.store(1, '/assets/tile_cell.png');
     this.tileService.store(2, '/assets/tile_rock.png');
     this.tileService.store(3, '/assets/ladderdown.png');
     this.tileService.store(4, '/assets/ladderup.png');

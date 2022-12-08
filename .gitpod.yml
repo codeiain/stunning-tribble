@@ -1,3 +1,4 @@
+
 tasks:
   - name: install ionic
     before: npm install -g @ionic/cli && npm install
@@ -9,3 +10,7 @@ tasks:
     before:  cd map-server
     init: pipenv install --dev
 
+
+vscode:
+  extensions:
+    - SonarSource.sonarlint-vscode
