@@ -1,9 +1,8 @@
-from .adapter.inmemory_websocket_repository import InMemoryWebsocketRepository
-from .domain.websocket_msg import WebSocketMsg
 from .middleware.room_event_middleware import RoomEventMiddleware
 from .domain.room import Room
 from .domain.user_list_response import UserListResponse
 from .domain.user_info_response import UserInfoResponse
+
 import logging
 import time
 from enum import Enum
@@ -24,40 +23,6 @@ log = logging.getLogger(__name__)  # pylint: disable=invalid-name
 app = FastAPI()
 app.debug = True
 
-html = """
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Chat</title>
-    </head>
-    <body>
-        <h1>WebSocket Chat</h1>
-        <form action="" onsubmit="sendMessage(event)">
-            <input type="text" id="messageText" autocomplete="off"/>
-            <button>Send</button>
-        </form>
-        <ul id='messages'>
-        </ul>
-        <script>
-            var ws = new WebSocket("wss://8000-codeiain-stunningtribbl-p7j1j1qk8v7.ws-eu77.gitpod.io/ws");
-            ws.onmessage = function(event) {
-                var messages = document.getElementById('messages')
-                var message = document.createElement('li')
-                var content = document.createTextNode(event.data)
-                message.appendChild(content)
-                messages.appendChild(message)
-            };
-            function sendMessage(event) {
-                var input = document.getElementById("messageText")
-                ws.send(input.value)
-                input.value = ''
-                event.preventDefault()
-            }
-        </script>
-    </body>
-</html>
-"""
-websocket_repository = InMemoryWebsocketRepository()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

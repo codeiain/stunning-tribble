@@ -65,9 +65,9 @@ export class MapService {
         let mapY = Math.ceil(j + this.viewportService.y);
 
         tile = this.getTile(mapX, mapY);
-        if (tile === undefined)[
+        if (tile === undefined) {
           tile = new TileModel()
-        ]
+        }
         this.tileService?.draw(i, j, tile);
       }
     }
