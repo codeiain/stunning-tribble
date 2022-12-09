@@ -5,7 +5,6 @@ volumes:
     grafana_data: {}
 
 services:
-
     mapserver:
         tty: true
         build: 
@@ -32,6 +31,19 @@ services:
             - prometheus
             - grafana
 
+    sonarcouldexporter:
+        tty: true
+        image: whyeasy/sonarcloud-exporter:latest
+        ports:
+            - 9999:9999
+        restart: always
+        environment:
+            - SC_ORGANIZATION=codeiain-1
+            - SC_TOKEN=20c1374022ed254e996e3f0dd90ff64b5bb92b3e
+            - LISTEN_ADDRESS=9999
+        depends_on:
+            - prometheus
+            - grafana
     couchbase:
         tty: true
         image: couchbase/server

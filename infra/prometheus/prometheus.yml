@@ -58,6 +58,10 @@ scrape_configs:
     static_configs:
     - targets: ['mapserver:8000']
     
+  - job_name: 'sonarcloud'
+    static_configs:
+    - targets: ['sonarcouldexporter:9999']
+
 #  - job_name: 'pushgateway'
 #    scrape_interval: 10s
 #    dns_sd_configs:
