@@ -5,6 +5,18 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 
+from starlette_prometheus import metrics, PrometheusMiddleware
+
+from os import environ, path
+from dotenv import load_dotenv
+
+basedir = path.abspath(path.dirname(__file__))
+load_dotenv(path.join(basedir, ".env"))
+
+BUILD_VERSION = environ.get("BUILD_VERSION")
+METRICS_PATH = environ.get("METRICS_PATH")
+NAME = environ.get("NAME")
+
 app = FastAPI()
 html = """
 <!DOCTYPE html>
@@ -32,7 +44,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
+app.add_middleware(PrometheusMiddleware)
+app.add_route("/" + METRICS_PATH, metrics)
 
 @app.get("/")
 async def get():

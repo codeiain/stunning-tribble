@@ -21,7 +21,7 @@ class InMemoryMapRepository(MapRepository):
             self.username,
             self.password,
         )
-        self.cluster = Cluster("couchbase://localhost", ClusterOptions(self.auth))
+        self.cluster = Cluster("couchbase://couchbase", ClusterOptions(self.auth))
         self.cluster.wait_until_ready(timedelta(seconds=5))
         self.cb = self.cluster.bucket(self.bucket_name)
         self.cb_coll = self.cb.scope("_default").collection("maps")

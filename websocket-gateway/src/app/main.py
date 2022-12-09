@@ -17,6 +17,14 @@ from starlette.responses import FileResponse
 from starlette.types import ASGIApp, Receive, Scope, Send
 from starlette.websockets import WebSocket
 from fastapi.staticfiles import StaticFiles
+from starlette_prometheus import metrics, PrometheusMiddleware
+
+from os import environ, path
+from dotenv import load_dotenv
+
+BUILD_VERSION = environ.get("BUILD_VERSION")
+METRICS_PATH = environ.get("METRICS_PATH")
+NAME = environ.get("NAME")
 
 log = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
@@ -30,10 +38,13 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.add_middleware(PrometheusMiddleware)
+app.add_route("/metrics" , metrics)
+
 os.getcwd()
-path = os.path.join(os.getcwd(),"websocket-gateway/src/app/static")
+path = os.path.join(os.getcwd(),"app/static")
 print(path)
-app.mount("/static", StaticFiles(directory=path)), name="static")
+app.mount("/static", StaticFiles(directory=path), name="static")
 app.add_middleware(RoomEventMiddleware)
 
 
