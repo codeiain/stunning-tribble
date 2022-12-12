@@ -37,7 +37,11 @@ export class MapService {
       [{ ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { ground: 5, solid: 0 }, { grounmmd: 5 }, { ground: 5, solid: 1, item: 2 }],
       [{ ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }, { ground: 5, solid: 1, item: 2 }]];
 
-  constructor(private apiService: ApiService, private screenService: ScreenService, private viewportService: ViewportService, private tileService: TileService) {
+  constructor(
+    private apiService: ApiService,
+    private screenService: ScreenService,
+    private viewportService: ViewportService,
+    private tileService: TileService) {
 
   }
 

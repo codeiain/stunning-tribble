@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Mode } from "@ionic/core";
-import { map } from "rxjs";
+import { map, Observable } from "rxjs";
+import { ApiService } from "src/api/player/services";
 import { MapService } from "./map.service";
 import { ModelService } from "./model.service";
 import { ScreenService } from "./screen.service";
@@ -22,9 +23,14 @@ export class PlayerService {
     private mapService: MapService,
     private scriptService: ScriptService,
     private modelService: ModelService,
-    private tileService: TileService) {
+    private tileService: TileService,
+    private apiService: ApiService) {
     console.log('PlayerService')
   }
+  public getPlayerFromService(player_id: any): Observable<any> {
+    return this.apiService.getPlayerPlayerPlayerIdGet({ player_id: player_id })
+  }
+
 
   public retrieve(index: number): HTMLImageElement {
     return this.sprite[index][0] as HTMLImageElement
@@ -34,7 +40,6 @@ export class PlayerService {
   public draw(){
     let loc = this.modelService.fixScreenLoc(this.model, {x:this.screenService.width, y: this.screenService.height});
     this.modelService.draw(this.model, this.spriteIndex, loc.x, loc.y);
-
   }
 
   public activate() {
