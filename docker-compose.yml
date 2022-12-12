@@ -5,6 +5,20 @@ volumes:
     grafana_data: {}
 
 services:
+
+    playerserver:
+        tty: true
+        build: 
+            context: player-server
+            dockerfile: Dockerfile
+        ports:
+            - 8010:8010
+        restart: always
+        depends_on:
+            - couchbase
+            - prometheus
+            - grafana
+
     mapserver:
         tty: true
         build: 

@@ -1,5 +1,5 @@
-from .adapter.inmemory_map_repository import InMemoryMapRepository
-from .domain.map import Map
+from .adapter.inmemory_player_repository import InMemoryPlayerRepository
+from .domain.player import Player
 
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
@@ -9,12 +9,13 @@ from starlette_prometheus import metrics, PrometheusMiddleware
 
 from os import environ, path
 from dotenv import load_dotenv
+from .config import BUILD_VERSION
 
 
 basedir = path.abspath(path.dirname(__file__))
 load_dotenv(path.join(basedir, ".env"))
 
-BUILD_VERSION = environ.get("BUILD_VERSION")
+BUILD_VERSION = BUILD_VERSION
 METRICS_PATH = environ.get("METRICS_PATH")
 NAME = environ.get("NAME")
 
@@ -23,14 +24,14 @@ html = """
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Map-Server</title>
+        <title>Player-Server</title>
     </head>
     <body>
-        <h1>Map-Server</h1>
+        <h1>Player-Server</h1>
     </body>
 </html>
 """
-map_repository = InMemoryMapRepository()
+player_repository = InMemoryPlayerRepository()
 origins = [
     "https://8100-codeiain-stunningtribbl-3ouo8f6hgvq.ws-eu77.gitpod.io/",
     "https://8000-codeiain-stunningtribbl-3ouo8f6hgvq.ws-eu77.gitpod.io/",
@@ -52,19 +53,18 @@ app.add_route("/" + METRICS_PATH, metrics)
 async def get():
     return HTMLResponse(html)
 
+@app.post("/player")
+async def add_player(player: Player):
+    result = player_repository.add(player)
+    return result
 
-@app.get("/map/{map_id}")
-async def get_map(map_id):
-    result = map_repository.get(map_id)
+@app.get("/player/{player_id}")
+async def get_player(player_id):
+    result = player_repository.get(player_id)
     return result
 
 
-@app.post("/create")
-async def create():
-    map = Map()
-    return map_repository.add(map)
+@app.post("/player/{player_id}")
+async def update_player(player_id: str, player: Player):
+    return player_repository.add(player)
 
-
-@app.get("/maps")
-async def get_all_maps():
-    return map_repository.all()

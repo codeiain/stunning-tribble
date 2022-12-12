@@ -58,6 +58,10 @@ scrape_configs:
     static_configs:
     - targets: ['mapserver:8000']
     
+  - job_name: 'Player-Server'
+    static_configs:
+    - targets: ['playerserver:8010']
+
   - job_name: 'sonarcloud'
     static_configs:
     - targets: ['sonarcouldexporter:9999']

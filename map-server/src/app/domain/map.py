@@ -15,8 +15,8 @@ class Map:
     map_data: list = field(default_factory=list)
     models_data: list = field(default_factory=list)
 
-    def save(self, websocket_repository: "WebSocketRepository"):
-        return websocket_repository.add(self)
+    def save(self, map_repository: "MapRepository"):
+        return map_repository.add(self)
 
     def __hash__(self):
         return hash(self.map_id)

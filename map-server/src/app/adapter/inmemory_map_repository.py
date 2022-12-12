@@ -53,7 +53,7 @@ class InMemoryMapRepository(MapRepository):
 
     def get(self, map_id) -> Map:
         scope = self.cb.scope("_default")
-        sql_query = "SELECT * FROM maps WHERE map_id = $1"
+        sql_query = "SELECT * FROM GameSystem._default.map WHERE map_id = $1"
         row_iter = scope.query(sql_query, QueryOptions(positional_parameters=[map_id]))
         result = {}
         print(type(result))
