@@ -44,12 +44,10 @@ class InMemoryMapRepository(MapRepository):
     def add(self, map: Map) -> Map:
         try:
             key = map.map_id
-            results = self.cb_coll.upsert(key, self.map_for_save(map))
+            return self.cb_coll.upsert(key, self.map_for_save(map))
         except Exception as e:
             print(e)
-        self.maps.append(map)
 
-        return self.maps
 
     def get(self, map_id) -> Map:
         scope = self.cb.scope("_default")

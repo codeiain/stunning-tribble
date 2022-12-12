@@ -61,8 +61,8 @@ async def get_map(map_id):
 
 @app.post("/create")
 async def create():
-    map = Map()
-    return map_repository.add(map)
+    new_map = Map()
+    return map_repository.add(new_map)
 
 
 @app.get("/maps")
