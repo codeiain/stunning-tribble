@@ -186,7 +186,7 @@
             userData.users.forEach(addToUsersList);
             $(function() {
                 let myUserId = null;
-                websocket = new WebSocket('wss://8000-codeiain-stunningtribbl-p7j1j1qk8v7.ws-eu77.gitpod.io/ws');
+                websocket = new WebSocket('wss://8001-codeiain-stunningtribbl-p7j1j1qk8v7.ws-eu77.gitpod.io/ws');
                 websocket.onopen = onWebsocketOpen(websocket);
                 websocket.onerror = onWebsocketError;
                 websocket.onclose = onWebsocketClose;
@@ -195,7 +195,7 @@
         }
         const oReq = new XMLHttpRequest();
         oReq.addEventListener("load", reqListener);
-        oReq.open("GET", "https://8000-codeiain-stunningtribbl-p7j1j1qk8v7.ws-eu77.gitpod.io/users");
+        oReq.open("GET", "https://8001-codeiain-stunningtribbl-p7j1j1qk8v7.ws-eu77.gitpod.io/users");
         oReq.send();
     });
 

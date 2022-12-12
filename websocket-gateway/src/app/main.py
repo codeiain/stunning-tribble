@@ -21,6 +21,7 @@ from starlette_prometheus import metrics, PrometheusMiddleware
 
 from os import environ, path
 from dotenv import load_dotenv
+from prometheus_client import Summary, Gauge
 
 BUILD_VERSION = environ.get("BUILD_VERSION")
 METRICS_PATH = environ.get("METRICS_PATH")
@@ -40,18 +41,19 @@ app.add_middleware(
 )
 app.add_middleware(PrometheusMiddleware)
 app.add_route("/metrics" , metrics)
-
-os.getcwd()
-path = os.path.join(os.getcwd(),"app/static")
-print(path)
-app.mount("/static", StaticFiles(directory=path), name="static")
+import os
+script_dir = os.path.dirname(__file__)
+st_abs_file_path = os.path.join(script_dir, "static/")
+app.mount("/static", StaticFiles(directory=st_abs_file_path), name="static")
 app.add_middleware(RoomEventMiddleware)
+
+active_players = Gauge('websockets_active', 'current active websockets')
 
 
 @app.get("/")
 def home():
     """Serve static index page."""
-    return FileResponse("/static/index.html")
+    return FileResponse(st_abs_file_path + "/index.html")
 
 
 @app.get("/users", response_model=UserListResponse)
@@ -114,6 +116,7 @@ class RoomLive(WebSocketEndpoint):
         users. The other connected users are notified of the new user's arrival,
         and finally the new user is added to the global :class:`~.Room` instance.
         """
+        active_players.inc()
         log.info("Connecting new user...")
         room: Optional[Room] = self.scope.get("room")
         if room is None:
@@ -131,6 +134,7 @@ class RoomLive(WebSocketEndpoint):
         """Disconnect the user, removing them from the :class:`~.Room`, and
         notifying the other users of their departure.
         """
+        active_players.dec()
         if self.user_id is None:
             raise RuntimeError(
                 "RoomLive.on_disconnect() called without a valid user_id"
