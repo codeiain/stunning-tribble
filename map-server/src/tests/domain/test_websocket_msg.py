@@ -6,7 +6,7 @@ sys.path.append("...")
 from app.domain.map import Map
 
 
-def text_map_existing_Map_cid():
+def text_map_existing_map_cid():
     map_id = str(uuid.uuid4())
     assert Map(map_id).map_id == map_id
 

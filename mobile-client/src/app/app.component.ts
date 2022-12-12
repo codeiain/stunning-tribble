@@ -9,5 +9,4 @@ export class AppComponent {
     { title: 'Game', url: '/game', icon:'mail'}
   ];
 
-  constructor() {}
 }

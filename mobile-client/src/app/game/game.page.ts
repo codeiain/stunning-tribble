@@ -1,17 +1,6 @@
 import { Component, OnInit, Inject } from "@angular/core";
 import { GameService } from "./services/game.service";
 import { DOCUMENT } from '@angular/common';
-import { KeyboardService } from "./services/keyboard.service";
-import { PlayerService } from "./services/player.service";
-import { TileService } from "./services/title.service";
-import { ScriptService } from "./services/script.service";
-import { ScreenService } from "./services/screen.service";
-import { ViewportService } from "./services/viewport.service";
-import { MapService } from "./services/map.service";
-import { ModelService } from "./services/model.service";
-import { NpcService } from "./services/npc.service";
-import { create } from 'nipplejs';
-
 
 @Component({
   selector: 'app-game',
@@ -35,8 +24,8 @@ export class GamePage implements OnInit {
   }
 
   public UILoaded(){
-    var canvas = document.getElementById('canvas') as HTMLCanvasElement;
-    var container = document.getElementById('container') as HTMLElement;
+    let canvas = document.getElementById('canvas') as HTMLCanvasElement;
+    let container = document.getElementById('container') as HTMLElement;
     let joystick = document.getElementById('nipple') as HTMLCanvasElement;
 
     let containerWidth = Math.floor(container.clientWidth / 16) * 16;
@@ -53,11 +42,5 @@ export class GamePage implements OnInit {
     this.gameService.LoadModels();
     this.gameService.startGame(joystick);
   }
-
-
-  ngOnInit(): void {
-
-  }
-
 
 }
