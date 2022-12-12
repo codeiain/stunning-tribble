@@ -7,7 +7,7 @@ import { DOCUMENT } from '@angular/common';
   templateUrl: './game.page.html',
   styleUrls: ['./game.page.scss'],
 })
-export class GamePage implements OnInit {
+export class GamePage  {
   public title!: string;
   size: number = 50;
 
