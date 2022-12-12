@@ -21,7 +21,7 @@ from starlette_prometheus import metrics, PrometheusMiddleware
 
 from os import environ, path
 from dotenv import load_dotenv
-from prometheus_client import Summary, Gauge
+from prometheus_client import Summary, Gauge, Counter
 
 BUILD_VERSION = environ.get("BUILD_VERSION")
 METRICS_PATH = environ.get("METRICS_PATH")
@@ -48,7 +48,7 @@ app.mount("/static", StaticFiles(directory=st_abs_file_path), name="static")
 app.add_middleware(RoomEventMiddleware)
 
 active_players = Gauge('websockets_active', 'current active websockets')
-
+websocket_msgs_receive = Counter('websockets_msgs_receive', 'websocket msgs receive from client')
 
 @app.get("/")
 def home():
@@ -143,6 +143,7 @@ class RoomLive(WebSocketEndpoint):
         await self.room.broadcast_user_left(self.user_id)
 
     async def on_receive(self, _websocket: WebSocket, msg: Any):
+        websocket_msgs_receive.inc()
         """Handle incoming message: `msg` is forwarded straight to `broadcast_message`."""
         if self.user_id is None:
             raise RuntimeError("RoomLive.on_receive() called without a valid user_id")
