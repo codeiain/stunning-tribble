@@ -103,7 +103,7 @@ services:
         ports:
           - '9121:9121'
         environment:
-          - REDIS_ADDR=redis://cache:6379
+          - REDIS_ADDR=redis://redis:6379
           - REDIS_PASSWORD=eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
 
     prometheus:
@@ -149,6 +149,8 @@ services:
             - prometheus
         ports:
             - 3000:3000
+        environment:
+            - GF_INSTALL_PLUGINS=flant-statusmap-panel,grafana-polystat-panel,snuids-radar-panel
         volumes:
             - ./infra/grafana/provisioning/:/etc/grafana/provisioning/
         env_file:

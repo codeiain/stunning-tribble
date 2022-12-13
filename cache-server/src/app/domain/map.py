@@ -10,10 +10,10 @@ if TYPE_CHECKING:
 @dataclass
 class Map:
     map_id: str = field(default_factory=lambda: str(uuid.uuid4()))
-    map_name: str = ""
-    author: str = ""
     map_data: list = field(default_factory=list)
     models_data: list = field(default_factory=list)
+    map_name: str = ""
+    author: str = ""
 
     def save(self, map_repository: "MapRepository"):
         return map_repository.add(self)

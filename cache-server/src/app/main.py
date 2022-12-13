@@ -1,6 +1,7 @@
 from .adapter.redis_player_repository import RedisPlayerRepository
 from .domain.player import Player
-
+from .adapter.redis_map_repository import RedisMapRepository
+from .domain.map import Map
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
