@@ -22,12 +22,14 @@ from starlette_prometheus import metrics, PrometheusMiddleware
 
 from .config import BUILD_VERSION, METRICS_PATH, NAME
 from .error_codes import GLOBAL_ROOM_UNAVAILABLE, USER_NOT_FOUND
-from .metrics import WEBSOCKETS_ACTIVE, WEBSOCKETS_MSGS_RECEIVED, WEBSOCKETS_ACTIVE_ROOMS
+from .metrics import WEBSOCKETS_ACTIVE, WEBSOCKETS_MSGS_RECEIVED, WEBSOCKETS_ACTIVE_ROOMS, PORT
 
 log = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
 app = FastAPI()
 app.debug = True
+
+PORT.info({'port': '8001'})
 
 app.add_middleware(
     CORSMiddleware,
