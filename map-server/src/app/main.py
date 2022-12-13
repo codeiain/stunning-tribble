@@ -1,4 +1,4 @@
-from .adapter.inmemory_map_repository import InMemoryMapRepository
+from .adapter.couchbase_map_repository import CouchbaseMapRepository
 from .domain.map import Map
 
 from fastapi import FastAPI
@@ -30,7 +30,7 @@ html = """
     </body>
 </html>
 """
-map_repository = InMemoryMapRepository()
+map_repository = CouchbaseMapRepository()
 origins = [
     "https://8100-codeiain-stunningtribbl-3ouo8f6hgvq.ws-eu77.gitpod.io/",
     "https://8000-codeiain-stunningtribbl-3ouo8f6hgvq.ws-eu77.gitpod.io/",

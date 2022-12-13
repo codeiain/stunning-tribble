@@ -13,7 +13,7 @@ class Room:
         self._user_meta: Dict[str, UserInfo] = {}
 
     def __len__(self) -> int:
-        return len(self._users)
+         return len(self._users)
 
     @property
     def empty(self) -> bool:

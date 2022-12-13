@@ -13,7 +13,7 @@ from ..config import CB_USERNAME, CB_PASSWORD, CB_BUCKET_NAME, CB_COLLECTION, CB
 import json
 
 
-class InMemoryPlayerRepository(PlayerRepository):
+class CouchbasePlayerRepository(PlayerRepository):
     def __init__(self):
         username = CB_USERNAME
         password = CB_PASSWORD
@@ -36,36 +36,36 @@ class InMemoryPlayerRepository(PlayerRepository):
     def player_for_save(self, player):
         player_data = {
             "player_id": player.player_id,
-            "player_map": player.player_map
+            "player_map": player.player_map,
+            "player_name": player.player_name,
+            "player_viewport_x": player.player_viewport_x,
+            "player_viewport_y": player.player_viewport_y
         }
         return player_data
 
 
     def update_player(self, player: Player) -> Player:
-        pass
+        self.add(player)
 
     def add(self, player: Player) -> Player:
         try:
             key = player.player_id
-            return self.cb_coll.upsert(key, self.player_for_save(player))
+            return self.cb_coll.upsert(key, self.player_for_save(player)).player_id
         except Exception as e:
             print(e)
 
-
-
     def get(self, player_id) -> Player:
-        # scope = self.cb.scope("_default")
-        # sql_query = "SELECT * FROM maps WHERE map_id = $1"
-        # row_iter = scope.query(sql_query, QueryOptions(positional_parameters=[map_id]))
-        # result = {}
-        # print(type(result))
-        # for row in row_iter:
-        #     print(type(row))
-        #     print(row)
-        #     result = row
-        # # return the first and only map the now
-        # return result
-        pass
+        scope = self.cb.scope("_default")
+        sql_query = "SELECT * FROM players WHERE player_id = $1"
+        row_iter = scope.query(sql_query, QueryOptions(positional_parameters=[player_id]))
+        result = {}
+        print(type(result))
+        for row in row_iter:
+            print(type(row))
+            print(row)
+            result = row
+        # return the first and only map the now
+        return result
 
     def all(self) -> List[Player]:
         # result = self.cluster.query("SELECT * from GameSystem._default.maps")

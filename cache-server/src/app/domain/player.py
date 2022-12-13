@@ -16,15 +16,11 @@ class Player:
     player_viewport_y: int = 1
     
 
-    def add(self, player_repository: "PlayerRepository"):
-        return player_repository.add(self)
+    def set(self, player_repository: "PlayerRepository"):
+        return player_repository.set(self)
 
-    def update(self, player_repository: "PlayerRepository"):
-        return player_repository.add(self)
-
-
-    def save(self, player_repository: "PlayerRepository"):
-        return player_repository.add(self)
+    def get(self, player_repository: "PlayerRepository"):
+        return player_repository.get(self)
 
     def __hash__(self):
         return hash(self.player_id)

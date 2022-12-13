@@ -11,7 +11,7 @@ from couchbase.options import ClusterOptions, ClusterTimeoutOptions, QueryOption
 import json
 
 
-class InMemoryMapRepository(MapRepository):
+class CouchbaseMapRepository(MapRepository):
     def __init__(self):
         self.maps = []
         self.username = "Administrator"

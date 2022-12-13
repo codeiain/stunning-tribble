@@ -1,4 +1,4 @@
-from .adapter.couchbase_player_repository import CouchbasePlayerRepository
+from .adapter.redis_player_repository import RedisPlayerRepository
 from .domain.player import Player
 
 from fastapi import FastAPI
@@ -14,20 +14,15 @@ html = """
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Player-Server</title>
+        <title>Cache-Server</title>
     </head>
     <body>
-        <h1>Player-Server</h1>
+        <h1>Cache-Server</h1>
     </body>
 </html>
 """
-player_repository = CouchbasePlayerRepository()
-origins = [
-    "https://8100-codeiain-stunningtribbl-3ouo8f6hgvq.ws-eu77.gitpod.io/",
-    "https://8000-codeiain-stunningtribbl-3ouo8f6hgvq.ws-eu77.gitpod.io/",
-    "http://localhost",
-    "http://localhost:8080",
-]
+player_repository = RedisPlayerRepository()
+map_repository = RedisMapRepository()
 
 app.add_middleware(
     CORSMiddleware,
@@ -43,18 +38,23 @@ app.add_route("/" + METRICS_PATH, metrics)
 async def get():
     return HTMLResponse(html)
 
-@app.post("/player")
-async def add_player(player: Player):
-    result = player_repository.add(player)
+@app.post("/cache/player")
+async def add_player_to_cache(player: Player):
+    result = player_repository.set(player)
     return result
 
-@app.get("/player/{player_id}")
-async def get_player(player_id):
+@app.get("/cache/player/{player_id}")
+async def get_player_from_cache(player_id):
     result = player_repository.get(player_id)
     return result
 
+@app.post("/cache/map")
+async def add_map_to_cache(map: Map):
+    result = map_repository.set(map)
+    return result
 
-@app.post("/player/{player_id}")
-async def update_player(player_id: str, player: Player):
-    return player_repository.add(player)
+@app.get("/cache/map/{map_id}")
+async def get_map_from_cache(map_id):
+    result = map_repository.get(map_id)
+    return result
 

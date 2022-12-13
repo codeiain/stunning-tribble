@@ -3,9 +3,22 @@ version: '3.3'
 volumes:
     prometheus_data: {}
     grafana_data: {}
-
+    redis:
+        driver: local
 services:
 
+    cacheserver:
+        tty: true
+        build: 
+            context: cache-server
+            dockerfile: Dockerfile
+        ports:
+            - 8011:8011
+        restart: always
+        depends_on:
+            - redis
+            - prometheus
+            - grafana
     playerserver:
         tty: true
         build: 
@@ -58,6 +71,7 @@ services:
         depends_on:
             - prometheus
             - grafana
+
     couchbase:
         tty: true
         image: couchbase/server
@@ -75,6 +89,22 @@ services:
             - "./mapTestData.json:/opt/couchbase/mapTestData.json"
         command: 
             - /opt/couchbase/setup-couchbase.sh
+    redis:
+        image: redis:6.2-alpine
+        restart: always
+        ports:
+            - '6379:6379'
+        command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+        volumes: 
+            - redis:/data
+    redisexporter:
+        image: oliver006/redis_exporter
+        restart: always
+        ports:
+          - '9121:9121'
+        environment:
+          - REDIS_ADDR=redis://cache:6379
+          - REDIS_PASSWORD=eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
 
     prometheus:
         image: prom/prometheus
@@ -130,3 +160,5 @@ services:
                 - node.role==manager
             restart_policy:
                 condition: on-failure
+
+                

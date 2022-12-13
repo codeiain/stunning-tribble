@@ -27,15 +27,24 @@ curl -v -X POST http://couchbase:8091/pools/default/buckets -u Administrator:pas
 curl -v -X POST http://couchbase:8091/pools/default/buckets/GameSystem/scopes/_default/collections -u Administrator:password -d name=maps -d maxTTL=0
   sleep 10s
 
+curl -v -X POST http://couchbase:8091/pools/default/buckets/GameSystem/scopes/_default/collections -u Administrator:password -d name=players -d maxTTL=0
+  sleep 10s
+
 curl -v -X POST http://couchbase:8091/settings/indexes -u Administrator:password -d storageMode=memory_optimized
 
-   sleep 10s 
+sleep 10s 
 
   /opt/couchbase/bin/curl -v http://couchbase:8093/query/service \
    -u Administrator:password \
    -d 'statement=CREATE PRIMARY INDEX ON `GameSystem`._default.maps'
 
-#   sleep 10s 
+ sleep 10s 
+
+  /opt/couchbase/bin/curl -v http://couchbase:8093/query/service \
+   -u Administrator:password \
+   -d 'statement=CREATE PRIMARY INDEX ON `GameSystem`._default.players'
+
+ sleep 10s 
 
 # /opt/couchbase/bin/cbimport json --format list \
 #   -c http://couchbase:8091 \
