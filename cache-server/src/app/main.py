@@ -8,8 +8,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import grpc
 
-import services.player_pb2_grpc as pb2_grpc
-import services.player_service
+from .services.player_pb2_grpc import *
+from .services.player_service import *
 
 from starlette_prometheus import metrics, PrometheusMiddleware
 
