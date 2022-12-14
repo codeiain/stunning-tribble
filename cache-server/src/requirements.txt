@@ -9,3 +9,5 @@ python-dotenv
 starlette
 starlette_prometheus
 redis
+grpcio
+grpcio-tools

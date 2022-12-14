@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package cache;
+
+service Player{
+    rpc CachePlayer(PlayerModel) returns (CacheResponse) {}
+    rpc GetCachePlayer(Player_id) returns (PlayerModel) {}
+}
+
+message Player_id{
+    string id=1;
+}
+
+message PlayerModel{
+    string player_id = 1;
+    string data = 2;
+}
+
+message CacheResponse{
+    string status =1;
+}

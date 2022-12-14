@@ -6,11 +6,19 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 
+import grpc
+
+import services.player_pb2_grpc as pb2_grpc
+import services.player_service
+
 from starlette_prometheus import metrics, PrometheusMiddleware
 
-from .config import BUILD_VERSION, METRICS_PATH, NAME
+from .config import BUILD_VERSION, METRICS_PATH, NAME, GRPC_PORT
+from .metrics import PORT
 
 app = FastAPI()
+PORT.info({'port': '8011'})
+
 html = """
 <!DOCTYPE html>
 <html>
@@ -59,3 +67,8 @@ async def get_map_from_cache(map_id):
     result = map_repository.get(map_id)
     return result
 
+grpc_server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+pb2_grpc.add_PlayerServicer_to_server(PlayerService(), server)
+grpc_server.add_insecure_port('[::]:{GRPC_PORT}')
+grpc_server.start()
+grpc_server.wait_for_termination()
