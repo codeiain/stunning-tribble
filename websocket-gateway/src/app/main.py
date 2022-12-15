@@ -1,10 +1,10 @@
+from .middleware.logger_middleware import LoggingMiddleware
 from .middleware.room_event_middleware import RoomEventMiddleware
 from .domain.room import Room
 from .domain.user_list_response import UserListResponse
 from .domain.user_info_response import UserInfoResponse
 
 import os
-import logging
 import time
 from enum import Enum
 from typing import Any, Dict, List, Optional
@@ -23,8 +23,9 @@ from starlette_prometheus import metrics, PrometheusMiddleware
 from .config import BUILD_VERSION, METRICS_PATH, NAME
 from .error_codes import GLOBAL_ROOM_UNAVAILABLE, USER_NOT_FOUND
 from .metrics import WEBSOCKETS_ACTIVE, WEBSOCKETS_MSGS_RECEIVED, WEBSOCKETS_ACTIVE_ROOMS, PORT
-
-log = logging.getLogger(__name__)  # pylint: disable=invalid-name
+from .logger import log
+  # pylint: disable=invalid-name
+log.info('Web socket server starting up ')
 
 app = FastAPI()
 app.debug = True
@@ -38,7 +39,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.add_middleware(LoggingMiddleware)
 app.add_middleware(PrometheusMiddleware)
+app.add_middleware(RoomEventMiddleware)
 app.add_route("/" + METRICS_PATH, metrics)
 
 import os
@@ -47,15 +51,12 @@ script_dir = os.path.dirname(__file__)
 st_abs_file_path = os.path.join(script_dir, "static/")
 app.mount("/static", StaticFiles(directory=st_abs_file_path), name="static")
 
-app.add_middleware(RoomEventMiddleware)
-
 
 
 @app.get("/")
 def home():
     """Serve static index page."""
     return FileResponse(st_abs_file_path + "/index.html")
-
 
 @app.get("/users", response_model=UserListResponse)
 async def list_users(request: Request):
@@ -64,7 +65,6 @@ async def list_users(request: Request):
     if room is None:
         raise GLOBAL_ROOM_UNAVAILABLE 
     return {"users": room.user_list}
-
 
 @app.get("/users/{user_id}", response_model=UserInfoResponse)
 async def get_user_info(request: Request, user_id: str):
@@ -75,7 +75,6 @@ async def get_user_info(request: Request, user_id: str):
     if user is None:
         raise USER_NOT_FOUND
     return user
-
 
 @app.post("/users/{user_id}/kick", response_model=UserListResponse)
 async def kick_user(request: Request, user_id: str):

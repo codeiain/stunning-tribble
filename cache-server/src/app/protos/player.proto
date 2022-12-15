@@ -2,16 +2,16 @@ syntax = "proto3";
 
 package cache;
 
-service Player{
-    rpc CachePlayer(PlayerModel) returns (CacheResponse) {}
-    rpc GetCachePlayer(Player_id) returns (PlayerModel) {}
+service PlayerCacheGRPC{
+    rpc CachePlayer(PlayerToCache) returns (CacheResponse) {}
+    rpc GetCachePlayer(Player_id) returns (PlayerToCache) {}
 }
 
 message Player_id{
     string id=1;
 }
 
-message PlayerModel{
+message PlayerToCache{
     string player_id = 1;
     string data = 2;
 }

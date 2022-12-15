@@ -1,3 +1,4 @@
+from .middleware.logger_middleware import LoggingMiddleware
 from .adapter.redis_player_repository import RedisPlayerRepository
 from .domain.player import Player
 from .adapter.redis_map_repository import RedisMapRepository
@@ -5,11 +6,12 @@ from .domain.map import Map
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
+from concurrent import futures
 
 import grpc
 
-from .services.protos.player_pb2_grpc import *
-from .services.player_service import PlayerService
+from .services.player_pb2_grpc import *
+from .services.player_service import PlayerCacheGRPCServicer
 
 from starlette_prometheus import metrics, PrometheusMiddleware
 
@@ -18,6 +20,8 @@ from .metrics import PORT
 
 app = FastAPI()
 PORT.info({'port': '8011'})
+
+app.add_middleware(LoggingMiddleware)
 
 html = """
 <!DOCTYPE html>
@@ -68,7 +72,7 @@ async def get_map_from_cache(map_id):
     return result
 
 grpc_server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-pb2_grpc.add_PlayerServicer_to_server(PlayerService(), server)
-grpc_server.add_insecure_port('[::]:{GRPC_PORT}')
+add_PlayerCacheGRPCServicer_to_server(PlayerCacheGRPCServicer(), grpc_server)
+grpc_server.add_insecure_port('0.0.0.0:'+GRPC_PORT)
 grpc_server.start()
 grpc_server.wait_for_termination()

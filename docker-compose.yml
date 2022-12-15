@@ -7,48 +7,18 @@ volumes:
     redis:
         driver: local
 services:
-    elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
-        container_name: elasticsearch
-        restart: always
-        environment:
-            - xpack.security.enabled=false
-            - discovery.type=single-node
-        ulimits:
-            memlock:
-                soft: -1
-                hard: -1
-            nofile:
-                soft: 65536
-                hard: 65536
-        cap_add:
-        - IPC_LOCK
-        volumes:
-            - ./elasticsearch-data:/usr/share/elasticsearch/data
+    mobileapp:
+        tty: true
+        build: 
+            context: mobile-client
+            dockerfile: Dockerfile
         ports:
-            - 9200:9200
-    kibana:
-        container_name: kibana
-        image: docker.elastic.co/kibana/kibana:7.4.0
+            - 4000:4000
         restart: always
-        environment:
-            - ELASTICSEARCH_HOSTS=http://elasticsearch:9200    # address of elasticsearch docker container which kibana will connect
-        ports:
-            - 5601:5601
         depends_on:
-        - elasticsearch 
-    fluentd:
-        build: ./infra/fluentd
-        volumes:
-            - ./infra/fluentd/conf:/fluentd/etc
-        links:
-            - "elasticsearch"
-        restart: always
-        container_name: fluentd
-        ports:
-            - "24224:24224"
-            - "24224:24224/udp"
-
+            - redis
+            - prometheus
+            - grafana
 
     cacheserver:
         tty: true
@@ -57,6 +27,7 @@ services:
             dockerfile: Dockerfile
         ports:
             - 8011:8011
+            - 9009:9009
         restart: always
         depends_on:
             - redis

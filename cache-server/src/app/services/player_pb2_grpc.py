@@ -2,10 +2,10 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from . import player_pb2 as protos_dot_player__pb2
+from .player_pb2 import *
 
 
-class PlayerStub(object):
+class PlayerCacheGRPCStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -15,18 +15,18 @@ class PlayerStub(object):
             channel: A grpc.Channel.
         """
         self.CachePlayer = channel.unary_unary(
-                '/cache.Player/CachePlayer',
-                request_serializer=protos_dot_player__pb2.PlayerModel.SerializeToString,
-                response_deserializer=protos_dot_player__pb2.CacheResponse.FromString,
+                '/cache.PlayerCacheGRPC/CachePlayer',
+                request_serializer=PlayerToCache.SerializeToString,
+                response_deserializer=CacheResponse.FromString,
                 )
         self.GetCachePlayer = channel.unary_unary(
-                '/cache.Player/GetCachePlayer',
-                request_serializer=protos_dot_player__pb2.Player_id.SerializeToString,
-                response_deserializer=protos_dot_player__pb2.PlayerModel.FromString,
+                '/cache.PlayerCacheGRPC/GetCachePlayer',
+                request_serializer=Player_id.SerializeToString,
+                response_deserializer=PlayerToCache.FromString,
                 )
 
 
-class PlayerServicer(object):
+class PlayerCacheGRPCServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def CachePlayer(self, request, context):
@@ -42,26 +42,26 @@ class PlayerServicer(object):
         raise NotImplementedError('Method not implemented!')
 
 
-def add_PlayerServicer_to_server(servicer, server):
+def add_PlayerCacheGRPCServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'CachePlayer': grpc.unary_unary_rpc_method_handler(
                     servicer.CachePlayer,
-                    request_deserializer=protos_dot_player__pb2.PlayerModel.FromString,
-                    response_serializer=protos_dot_player__pb2.CacheResponse.SerializeToString,
+                    request_deserializer=PlayerToCache.FromString,
+                    response_serializer=CacheResponse.SerializeToString,
             ),
             'GetCachePlayer': grpc.unary_unary_rpc_method_handler(
                     servicer.GetCachePlayer,
-                    request_deserializer=protos_dot_player__pb2.Player_id.FromString,
-                    response_serializer=protos_dot_player__pb2.PlayerModel.SerializeToString,
+                    request_deserializer=Player_id.FromString,
+                    response_serializer=PlayerToCache.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'cache.Player', rpc_method_handlers)
+            'cache.PlayerCacheGRPC', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
  # This class is part of an EXPERIMENTAL API.
-class Player(object):
+class PlayerCacheGRPC(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
@@ -75,9 +75,9 @@ class Player(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cache.Player/CachePlayer',
-            protos_dot_player__pb2.PlayerModel.SerializeToString,
-            protos_dot_player__pb2.CacheResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/cache.PlayerCacheGRPC/CachePlayer',
+            PlayerToCache.SerializeToString,
+            CacheResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -92,8 +92,8 @@ class Player(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cache.Player/GetCachePlayer',
-            protos_dot_player__pb2.Player_id.SerializeToString,
-            protos_dot_player__pb2.PlayerModel.FromString,
+        return grpc.experimental.unary_unary(request, target, '/cache.PlayerCacheGRPC/GetCachePlayer',
+            Player_id.SerializeToString,
+            PlayerToCache.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
