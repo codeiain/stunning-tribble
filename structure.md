@@ -1,7 +1,7 @@
 ```mermaid
 flowchart TD
 
-    mobile-app(mobile app \n)
+    mobile-app(mobile app \n PORT: 8100)
     websocket-server(websocket-server \n Rest \n Port:8001\n /users/user_id \n /users/user_id/kick \n /ws \n /docs \n /metrics)
     cache-server(cache-server \n Rest \n Port: 8011\n /cache/player \n /cache/player/player_id \n /cache/map \n /cache/map/map_id \n /docs \n /metrics\n GRPC \n Port 9009)
     player-server(player-server \n Rest \n Port:8010\n /player\n /player/player_id \n /docs \n /metrics)
