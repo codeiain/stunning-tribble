@@ -12,6 +12,7 @@ from concurrent import futures
 import grpc
 from .player_pb2 import *
 from .player_pb2_grpc import add_PlayerCacheGRPCServicer_to_server
+from threading import Thread
 
 app = FastAPI()
 html = """
@@ -63,8 +64,13 @@ async def update_player(player_id: str, player: Player):
     return player_repository.add(player)
 
 
-server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-add_PlayerCacheGRPCServicer_to_server(GrpcPlayerService(), server)
-server.add_insecure_port('[::]:'+GRPC_PORT)
-server.start()
-server.wait_for_termination()
+def start_grpc():
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    add_PlayerCacheGRPCServicer_to_server(GrpcPlayerService(), server)
+    server.add_insecure_port('[::]:'+GRPC_PORT)
+    server.start()
+    print("Server started, listening on " + GRPC_PORT)
+    server.wait_for_termination()
+
+thread = Thread(target = start_grpc)
+thread.start()

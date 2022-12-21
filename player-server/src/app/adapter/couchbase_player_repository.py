@@ -22,7 +22,6 @@ class CouchbasePlayerRepository(PlayerRepository):
             username,
             password,
         )
-        print(CB_CLUSTER)
         self.cluster = Cluster(CB_CLUSTER, ClusterOptions(auth))
         self.cluster.wait_until_ready(timedelta(seconds=60))
         self.cb = self.cluster.bucket(bucket_name)
