@@ -17,7 +17,8 @@ import { ScriptService } from './services/script.service';
 import { ModelService } from './services/model.service';
 import { NpcService } from './services/npc.service';
 import { JoystickService } from './services/joystick.service';
-
+import { GameEngine } from './services/gameEngine/game.service';
+import { PlayerService as NewPlayerService } from './services/gameEngine/player.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -37,7 +38,9 @@ import { JoystickService } from './services/joystick.service';
     ScriptService,
     ModelService,
     NpcService,
-    JoystickService
+    JoystickService,
+    GameEngine,
+    NewPlayerService
   ],
   declarations: [GamePage]
 })

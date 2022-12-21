@@ -1,5 +1,7 @@
 import { Component, OnInit, Inject } from "@angular/core";
 import { GameService } from "./services/game.service";
+import { GameEngine } from "./services/gameEngine/game.service";
+
 import { DOCUMENT } from '@angular/common';
 
 @Component({
@@ -13,8 +15,8 @@ export class GamePage  {
 
   constructor(
     private gameService: GameService,
+    private gameEngine: GameEngine,
     @Inject(DOCUMENT) document: Document) {
-
   }
 
   ionViewDidEnter() {
@@ -41,6 +43,8 @@ export class GamePage  {
     this.gameService.LoadTiles();
     this.gameService.LoadModels();
     this.gameService.startGame(joystick);
+
+    this.gameEngine.getPlayerbyId('567f5741-0862-4dd6-a442-3d8f819a9dd5');
   }
 
 }

@@ -61,4 +61,14 @@ sleep 10s
     --scope-collection-exp "_default.maps" \
     -g %map_id% 
 
+ sleep 10s 
+ 
+/opt/couchbase/bin/cbimport json --format list \
+    -c http://couchbase:8091 \
+    -u Administrator -p password \
+    -d 'file:///opt/couchbase/playersTestData.json' \
+    -b 'GameSystem' \
+    --scope-collection-exp "_default.players" \
+    -g %player_id% 
+
 fg 1

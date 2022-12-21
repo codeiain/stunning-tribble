@@ -1,6 +1,6 @@
 from .adapter.couchbase_player_repository import CouchbasePlayerRepository
 from .domain.player import Player
-
+from .grpc_player_service import GrpcPlayerService
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -8,6 +8,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette_prometheus import metrics, PrometheusMiddleware
 
 from .config import BUILD_VERSION, METRICS_PATH, NAME
+from concurrent import futures
+import grpc
+from .protos.player_pb2 import *
+from .protos.player_pb2_grpc import *
 
 app = FastAPI()
 html = """
@@ -58,3 +62,9 @@ async def get_player(player_id):
 async def update_player(player_id: str, player: Player):
     return player_repository.add(player)
 
+
+server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+pb2_grpc.add_PlayerCacheGRPCServicer_to_server(GrpcPlayerService(), server)
+server.add_insecure_port('[::]:'+GRPC_PORT)
+server.start()
+server.wait_for_termination()

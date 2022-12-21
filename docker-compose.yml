@@ -6,7 +6,56 @@ volumes:
     elasticsearch: {}
     redis:
         driver: local
+
 services:
+    mediawiki:
+        container_name: wiki
+        image: mediawiki
+        restart: always
+        ports:
+            - 80:80
+        links:
+            - database
+        volumes:
+            - type: build
+              source: ./infra/mediawiki/LocalSettings.php
+              target: /var/www/html/LocalSettings.php
+
+            - ./infra/mediawiki/images:/var/www/html/images
+            # After initial setup, download LocalSettings.php to the same directory as
+            # this yaml and uncomment the following line and use compose to restart
+            # the mediawiki service
+            - ./infra/mediawiki/LocalSettings.php:/var/www/html/LocalSettings.php
+    alertmanager:
+        image: prom/alertmanager
+        ports:
+        - 9093:9093
+        volumes:
+        - "./infra/alertmanager/:/etc/alertmanager/"
+        command:
+        - '--config.file=/etc/alertmanager/config.yml'
+        - '--storage.path=/alertmanager'
+        deploy:
+            placement:
+                constraints:
+                - node.role==manager
+            restart_policy:
+                condition: on-failure   
+
+    database:
+        image: mariadb
+        container_name: db
+        restart: always
+        ports:
+            - 3306:3306
+        environment:
+            # @see https://phabricator.wikimedia.org/source/mediawiki/browse/master/includes/DefaultSettings.php
+            MYSQL_RANDOM_ROOT_PASSWORD: 0
+            MYSQL_DATABASE: my_wiki
+            MYSQL_USER: wikiuser 
+            MYSQL_PASSWORD: example
+        volumes:
+            - ./infra/mysql/data:/var/lib/mysql
     mobileapp:
         tty: true
         build: 
@@ -20,14 +69,13 @@ services:
             - prometheus
             - grafana
 
-    cacheserver:
+    playercacheserver:
         tty: true
         build: 
-            context: cache-server
+            context: player-cache-server
             dockerfile: Dockerfile
         ports:
             - 8011:8011
-            - 9009:9009
         restart: always
         depends_on:
             - redis
@@ -40,6 +88,7 @@ services:
             dockerfile: Dockerfile
         ports:
             - 8010:8010
+            - 9009:9009
         restart: always
         depends_on:
             - couchbase

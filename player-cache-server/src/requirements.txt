@@ -2,8 +2,6 @@ fastapi
 pydantic
 uvicorn
 pipenv
-couchbase
-websockets
 prometheus_client
 python-dotenv
 starlette

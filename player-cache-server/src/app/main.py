@@ -1,17 +1,10 @@
 from .middleware.logger_middleware import LoggingMiddleware
 from .adapter.redis_player_repository import RedisPlayerRepository
 from .domain.player import Player
-from .adapter.redis_map_repository import RedisMapRepository
-from .domain.map import Map
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from concurrent import futures
-
-import grpc
-
-from .services.player_pb2_grpc import *
-from .services.player_service import PlayerCacheGRPCServicer
 
 from starlette_prometheus import metrics, PrometheusMiddleware
 
@@ -27,7 +20,7 @@ html = """
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Cache-Server</title>
+        <title>Player-Cache-Server</title>
     </head>
     <body>
         <h1>Cache-Server</h1>
@@ -35,7 +28,6 @@ html = """
 </html>
 """
 player_repository = RedisPlayerRepository()
-map_repository = RedisMapRepository()
 
 app.add_middleware(
     CORSMiddleware,
@@ -60,19 +52,3 @@ async def add_player_to_cache(player: Player):
 async def get_player_from_cache(player_id):
     result = player_repository.get(player_id)
     return result
-
-@app.post("/cache/map")
-async def add_map_to_cache(map: Map):
-    result = map_repository.set(map)
-    return result
-
-@app.get("/cache/map/{map_id}")
-async def get_map_from_cache(map_id):
-    result = map_repository.get(map_id)
-    return result
-
-grpc_server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-add_PlayerCacheGRPCServicer_to_server(PlayerCacheGRPCServicer(), grpc_server)
-grpc_server.add_insecure_port('0.0.0.0:'+GRPC_PORT)
-grpc_server.start()
-grpc_server.wait_for_termination()

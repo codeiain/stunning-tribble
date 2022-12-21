@@ -3,7 +3,7 @@ flowchart TD
 
     mobile-app(mobile app \n PORT: 8100)
 
-    websocket-server("websocket-server \n Rest \n Port:8001\n GET:/users\n GET:/users/{user_id} \n POST:/users/user_id/kick \n GET:/docs \n GET:/metrics \n /ws ")
+    websocket-server("websocket-server \n Rest \n Port:8001\n GET:/users\n GET:/users/{user_id} \n POST:/users/{user_id}/kick \n GET:/docs \n GET:/metrics \n /ws ")
 
     cache-server("cache-server \n Rest \n Port: 8011\n POST:/cache/player \n GET:/cache/player/{player_id} \n POST:/cache/map \n GET:/cache/map/{map_id} \n GET:/docs \n GET:/metrics\n GRPC \n Port 9009")
 
@@ -20,7 +20,8 @@ flowchart TD
     couchbase[(couchbase \n Port: 8091)]
     prometheus(prometheus \n Port: 9090)
     redis[(redis \n Port:6379)]
-    
+    alertmanager(alert manager \n Port:9093)
+
     mobile-app --> websocket-server
     websocket-server --> cache-server
     mobile-app --> player-server
@@ -29,6 +30,7 @@ flowchart TD
     map-server --> couchbase
     player-server --> couchbase
     cache-server --> redis
+    alertmanager --> prometheus
 
     websocket-server --> prometheus
     cache-server --> prometheus

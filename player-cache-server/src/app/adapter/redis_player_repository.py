@@ -17,10 +17,10 @@ class RedisPlayerRepository(PlayerRepository):
     def player_for_save(self, player):
         player_data = {
             "player_id": player.player_id,
-            "player_map": player.player_map,
-            "player_name": player.player_name,
-            "player_viewport_x": player.player_viewport_x,
-            "player_viewport_y": player.player_viewport_y
+            "current_map": player.player_map,
+            "name": player.name,
+            "hp": player.hp,
+            "ac": player.ac
         }
         return player_data
 

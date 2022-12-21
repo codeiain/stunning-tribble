@@ -7,7 +7,6 @@ RUN pipenv install --dev
 RUN ls
 
 EXPOSE 8011
-EXPOSE 9009
 
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8011"]
