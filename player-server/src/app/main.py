@@ -7,11 +7,11 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from starlette_prometheus import metrics, PrometheusMiddleware
 
-from .config import BUILD_VERSION, METRICS_PATH, NAME
+from .config import BUILD_VERSION, METRICS_PATH, NAME, GRPC_PORT
 from concurrent import futures
 import grpc
-from .protos.player_pb2 import *
-from .protos.player_pb2_grpc import *
+from .player_pb2 import *
+from .player_pb2_grpc import add_PlayerCacheGRPCServicer_to_server
 
 app = FastAPI()
 html = """
@@ -64,7 +64,7 @@ async def update_player(player_id: str, player: Player):
 
 
 server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-pb2_grpc.add_PlayerCacheGRPCServicer_to_server(GrpcPlayerService(), server)
+add_PlayerCacheGRPCServicer_to_server(GrpcPlayerService(), server)
 server.add_insecure_port('[::]:'+GRPC_PORT)
 server.start()
 server.wait_for_termination()

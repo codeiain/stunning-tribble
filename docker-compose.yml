@@ -56,18 +56,18 @@ services:
             MYSQL_PASSWORD: example
         volumes:
             - ./infra/mysql/data:/var/lib/mysql
-    mobileapp:
-        tty: true
-        build: 
-            context: mobile-client
-            dockerfile: Dockerfile
-        ports:
-            - 8100:8100
-        restart: always
-        depends_on:
-            - redis
-            - prometheus
-            - grafana
+    # mobileapp:
+    #     tty: true
+    #     build: 
+    #         context: mobile-client
+    #         dockerfile: Dockerfile
+    #     ports:
+    #         - 8100:8100
+    #     restart: always
+    #     depends_on:
+    #         - redis
+    #         - prometheus
+    #         - grafana
 
     playercacheserver:
         tty: true

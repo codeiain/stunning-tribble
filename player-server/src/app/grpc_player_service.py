@@ -1,6 +1,6 @@
-from .protos.player_pb2_grpc import player_pb2_grpc as pb2_grpc
-
-class GrpcPlayerService(pb2_grpc.PlayerCacheGRPC):
+from .player_pb2 import *
+from .player_pb2_grpc import PlayerCacheGRPC
+class GrpcPlayerService(PlayerCacheGRPC):
 
     def __init__(self, *args, **kwargs):
         pass
