@@ -68,6 +68,13 @@ scrape_configs:
     static_configs:
     - targets: ['cacheserver:8011']
 
+  - job_name: 'Player-Cache-Server'
+    static_configs:
+    - targets: ['playercacheserver:8011']
+
+  - job_name: 'Auth-Server'
+    static_configs:
+    - targets: ['authserver:8013']
 #  - job_name: 'pushgateway'
 #    scrape_interval: 10s
 #    dns_sd_configs:

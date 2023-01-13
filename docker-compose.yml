@@ -81,6 +81,20 @@ services:
             - redis
             - prometheus
             - grafana
+
+
+    authserver:
+        tty: true
+        build: 
+            context: auth-server
+            dockerfile: Dockerfile
+        ports:
+            - 8013:8013
+        restart: always
+        depends_on:
+            - couchbase
+            - prometheus
+            - grafana
     playerserver:
         tty: true
         build: 

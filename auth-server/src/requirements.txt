@@ -1,0 +1,11 @@
+fastapi
+flask
+pydantic
+uvicorn
+pipenv
+couchbase
+prometheus_client
+python-dotenv
+starlette
+starlette_prometheus
+python-multipart
