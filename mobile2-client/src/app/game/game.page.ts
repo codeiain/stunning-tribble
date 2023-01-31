@@ -26,14 +26,12 @@ export class GamePage implements OnInit {
       height: 224,
       zoom: 3,
       pixelArt: true,
+      scale: {
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        mode: Phaser.Scale.ENVELOP,
+      },
       physics: {
-        default: 'arcade',
-        arcade: {
-          gravity: {
-            y: 0
-          },
-          debug: false // set to true to view zones
-        }
+        default: 'arcade'
       },
       scene: [
         BootScene,
