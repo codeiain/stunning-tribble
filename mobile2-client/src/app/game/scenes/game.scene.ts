@@ -1076,17 +1076,17 @@ export class GameScene extends Scene {
     });
 
     // Animations
-    this.gridEngine.movementStarted().subscribe((charId: any, direction: any) => {
-      if (charId === 'hero') {
-        this.heroSprite.anims.play(`hero_walking_${direction}`);
+    this.gridEngine.movementStarted().subscribe((data:any) => {
+      if (data.charId === 'hero') {
+        this.heroSprite.anims.play(`hero_walking_${data.direction}`);
       } else {
-        if (charId === 'hero') {
-          const npc = npcSprites.getChildren().find((npcSprite: any) => npcSprite.texture.key === charId) as any;
+        if (data.charId === 'hero') {
+          const npc = npcSprites.getChildren().find((npcSprite: any) => npcSprite.texture.key === data.charId) as any;
           if (npc) {
-            npc.anims.play(`${charId}_walking_${direction}`);
+            npc.anims.play(`${data.charId}_walking_${data.direction}`);
             return;
           }
-          const enemy = this.enemiesSprites.getChildren().find((enemySprite: any) => enemySprite.name === charId);
+          const enemy = this.enemiesSprites.getChildren().find((enemySprite: any) => enemySprite.name === data.charId);
           if (enemy) {
             enemy.anims.play(`${enemy.enemySpecies}_walking`);
           }
